@@ -14,6 +14,9 @@
 # define FT_LS_H
 
 # include <dirent.h>
+# include <pwd.h>
+# include <grp.h>
+# include <time.h>
 # include "libft.h"
 # include <sys/types.h>
 # include <stdio.h>
@@ -29,9 +32,12 @@ typedef struct	s_options
 	char :2;
 	unsigned char loaded:1;
 }				t_options;
-int get_args(int ac, char **argv, t_options* const options, t_list** paths_lst);
-int load_options(char *str, t_options * const options);
-int load_path(char *path, t_list** paths_lst);
-int usage_error(char option);
+int 	get_args(int ac, char **argv, t_options* const options, t_list** paths_lst);
+int 	load_options(char *str, t_options * const options);
+int 	load_path(char *path, t_list** paths_lst);
+int 	usage_error(char option);
+void	format_time(char *str_date, char *buf);
+void	get_mode(mode_t m, char *buf);
+void	get_type(mode_t m ,char *buf);
 
 #endif
