@@ -6,7 +6,7 @@
 /*   By: lpersin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 12:37:40 by lpersin           #+#    #+#             */
-/*   Updated: 2019/04/24 14:30:14 by lpersin          ###   ########.fr       */
+/*   Updated: 2019/04/29 13:42:31 by lpersin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef struct	s_options
 }				t_options;
 int 	get_args(int ac, char **argv, t_options* const options, t_list** paths_lst);
 int 	load_options(char *str, t_options * const options);
-int 	load_path(char *path, t_list** paths_lst);
+int 	load_path(char *path, int path_len, t_list** paths_lst);
 int 	usage_error(char option);
 void	format_time(char *str_date, char *buf);
 void	get_mode(mode_t m, char *buf);

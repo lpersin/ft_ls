@@ -14,7 +14,7 @@ int get_args(int ac, char **av, t_options* const options, t_list** paths_lst)
 		else
 		{
 			options->loaded = 1;
-			load_path(av[i], paths_lst);
+			load_path(av[i], ft_strlen(av[i]), paths_lst);
 		}
 		i++;
 	}
@@ -44,11 +44,11 @@ int load_options(char *str, t_options* const options)
 	return (0);
 }
 
-int load_path(char *path, t_list** paths_lst)
+int load_path(char *path, int path_len, t_list** paths_lst)
 {
 	t_list* node;
 
-	if ((node = ft_lstnew(path, ft_strlen(path) + 1)) == NULL)
+	if ((node = ft_lstnew(path, path_len + 1)) == NULL)
 		return (1); //use strerror here
 	if (*paths_lst == NULL)
 		*paths_lst = node;

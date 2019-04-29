@@ -6,7 +6,7 @@
 /*   By: lpersin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 13:01:31 by lpersin           #+#    #+#             */
-/*   Updated: 2019/04/24 15:27:40 by lpersin          ###   ########.fr       */
+/*   Updated: 2019/04/29 16:33:44 by lpersin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,25 @@
 
 int main(int argc, char **argv)
 {
-	/*
 	t_list *paths_lst;
 	t_options *options;
 
 	paths_lst = NULL;
 	options = (t_options*)malloc(sizeof(t_options));
 	get_args(argc, argv, options, &paths_lst);
-	
-	
-	DIR *dir_p = opendir("toto");
-	struct dirent* dp;
-	dp = readdir(dir_p); 
 
+	ft_alpha_sortlst(&paths_lst);
+
+	while (paths_lst != NULL)
+	{
+		ft_node_to_str(paths_lst);
+		paths_lst = paths_lst->next;
+	}
+/*
+	DIR *dir_p = opendir(".");
+	struct dirent* dp;
+
+	ft_putnbr(ft_strcmp("a", "b"));
 	while ((dp = readdir(dir_p)) != NULL)
 	{
 		ft_putstr(dp->d_name);
@@ -48,8 +54,6 @@ int main(int argc, char **argv)
 	char *date = ft_strnew(12);
 	format_time(ctime(&(buf->st_mtime)), date);
 	ft_putstr("\nDate de derniere modification: "); ft_putstr(date);//ft_putstr(ctime(&(buf->st_mtim.tv_sec)));
-	return(0);
 	*/
-
-	
+	return(0);
 }
