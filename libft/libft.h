@@ -97,5 +97,6 @@ void				ft_node_to_str(t_list *node);
 int					get_next_line(const int fd, char **line);
 char				*ft_strfill(char *str, char c, size_t nb);
 void				ft_alpha_sortlst(t_list **head_ref);
+void				ft_fct_sortlst(t_list **head_ref, int (*f)(t_list*, t_list*));
 
 #	endif

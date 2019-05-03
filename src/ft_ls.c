@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/* *********************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   ft_ls.c                                            :+:      :+:    :+:   */
@@ -12,22 +12,46 @@
 
 #include "ft_ls.h"
 
+
+void default_ls(t_list *paths_lst)
+{
+		read_dir(".", &paths_lst);
+		del_dot_files(&paths_lst);
+		ft_alpha_sortlst(&paths_lst);
+		print_paths_lst(paths_lst);
+}
+
+void options_ls(t_list *paths_lst, t_options *options)
+{
+	if (paths_lst == NULL)
+		read_dir(".", &paths_lst);
+	if (options->a == 0)
+		del_dot_files(&paths_lst);
+	if (options->t == 1)
+		ft_fct_sortlst(&paths, &last_modif_time_sort);
+	if (options->r == 1)
+		ft_lstrev(&paths_lst);
+}
+
 int main(int argc, char **argv)
 {
 	t_list *paths_lst;
 	t_options *options;
 
 	paths_lst = NULL;
-	options = (t_options*)malloc(sizeof(t_options));
-	get_args(argc, argv, options, &paths_lst);
-
-	ft_alpha_sortlst(&paths_lst);
-
-	while (paths_lst != NULL)
+	if (argc > 1)
 	{
-		ft_node_to_str(paths_lst);
-		paths_lst = paths_lst->next;
+		options = (t_options*)malloc(sizeof(t_options));
+		get_args(argc, argv, options, &paths_lst);
+		get_t_dir();
+		if (options->R == 1)
+			recursive_ls();
+		else
+			options_ls(t_list *paths_lst, t_options *options);
 	}
+	else
+		default_ls(paths_lst);
+	
 /*
 	DIR *dir_p = opendir(".");
 	struct dirent* dp;
