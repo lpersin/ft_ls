@@ -16,7 +16,7 @@
 void default_ls(t_list *paths_lst)
 {
 		read_dir(".", &paths_lst);
-		del_dot_files(&paths_lst);
+		del_dot_files(paths_lst);
 		ft_alpha_sortlst(&paths_lst);
 		print_paths_lst(paths_lst);
 }
@@ -26,9 +26,9 @@ void options_ls(t_list *paths_lst, t_options *options)
 	if (paths_lst == NULL)
 		read_dir(".", &paths_lst);
 	if (options->a == 0)
-		del_dot_files(&paths_lst);
+		del_dot_files(paths_lst);
 	if (options->t == 1)
-		ft_fct_sortlst(&paths, &last_modif_time_sort);
+		ft_fct_sortlst(&paths_lst, &last_modif_time_sort);
 	if (options->r == 1)
 		ft_lstrev(&paths_lst);
 }

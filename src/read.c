@@ -21,3 +21,13 @@ void	print_paths_lst(t_list *paths_lst)
 		paths_lst = paths_lst->next;
 	}	
 }
+
+t_file	*get_t_file(char * path)
+{
+	t_file	*del_dot_files;
+
+	if (paths_lst == NULL)
+		path = ".";
+	else
+
+}

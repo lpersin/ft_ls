@@ -33,12 +33,11 @@ typedef struct	s_options
 	unsigned char loaded:1;
 }				t_options;
 
-typedef struct s_dir
+typedef struct s_file
 {
 	char *name;
 	struct stat *stat_buf;
-}				t_dir;
-
+}				t_file;
 int 	get_args(int ac, char **argv, t_options* const options, t_list** paths_lst);
 int 	load_options(char *str, t_options * const options);
 int 	load_path(char *path, int path_len, t_list** paths_lst);
@@ -50,5 +49,7 @@ void	read_dir(char *path, t_list **paths_lst);
 void	print_paths_lst(t_list *paths_lst);
 int		alpha_sort(t_list* a, t_list* b);
 int		last_modif_time_sort(t_list* a, t_list*b);
+void	free_t_file(t_list *node);
+t_list	*del_dot_files(t_list *curr_node);
 
 #endif

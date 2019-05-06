@@ -98,5 +98,6 @@ int					get_next_line(const int fd, char **line);
 char				*ft_strfill(char *str, char c, size_t nb);
 void				ft_alpha_sortlst(t_list **head_ref);
 void				ft_fct_sortlst(t_list **head_ref, int (*f)(t_list*, t_list*));
+t_list	*ft_nodedel(t_list *curr_node, int (*target)(t_list*), void (*del)(void*, size_t));
 
 #	endif
