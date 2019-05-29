@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 		if (options->R == 1)
 			recursive_ls();
 		else
-			options_ls(t_list *paths_lst, t_options *options);
+			options_ls(paths_lst, options);
 	}
 	else
 		default_ls(paths_lst);
