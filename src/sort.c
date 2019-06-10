@@ -2,34 +2,30 @@
 
 int	alpha_sort(t_list* a, t_list* b)
 {
-	return (ft_strcmp(((t_file*)a->content)->name, ((t_file*)b->content)->name));
+	return (ft_strcmp(((t_entry*)a->content)->name, 
+				((t_entry*)b->content)->name));
 }
 
 int last_modif_time_sort(t_list* a, t_list*b)
 {
-	return ((int) ((t_file*)b->content)->stat_buf->st_mtime - ((t_file*)a->content)->stat_buf->st_mtime);
+	return ((int) ((t_entry*)b->content)->stat_buf->st_mtime - 
+			((t_entry*)a->content)->stat_buf->st_mtime);
 }
 
-t_list	*del_dot_files(t_list *curr_node)
+t_list	*del_dot_entries(t_list *paths_lst)
 {
-	t_list *tmp_nxt_node;
-
-	if (curr_node == NULL)
+	ft_putstr(((t_entry*)paths_lst->content)->name);
+	if (paths_lst == NULL)
 		return NULL;
-	if (((t_file*)(curr_node->content))->name[0] == '.')
-	{
-		tmp_nxt_node = curr_node->next;
-		free_t_file(curr_node);
-		free(curr_node);
-		return tmp_nxt_node;
-	}
-	curr_node->next = del_dot_files(curr_node->next);
-	return curr_node;
+	if (((t_entry*)paths_lst->content)->name[0] == '.')
+		return del_dot_entries(paths_lst->next);
+	paths_lst->next = del_dot_entries(paths_lst->next);
+	return paths_lst;
 }
 
 
-void free_t_file(t_list *node)
+void free_t_entry(t_entry *entry)
 {
-	free(((t_file*)node->content)->name);
-	free(((t_file*)node->content)->stat_buf);
+	ft_memdel((void**) &(entry->name));
+	ft_memdel((void**) &(entry->stat_buf));
 }

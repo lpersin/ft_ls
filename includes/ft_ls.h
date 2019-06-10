@@ -6,7 +6,7 @@
 /*   By: lpersin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 12:37:40 by lpersin           #+#    #+#             */
-/*   Updated: 2019/04/29 13:42:31 by lpersin          ###   ########.fr       */
+/*   Updated: 2019/06/10 17:26:39 by lpersin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <sys/types.h>
 # include <stdio.h>
 # include <sys/stat.h>
+# include <errno.h>
 
 typedef struct	s_options
 {
@@ -33,23 +34,26 @@ typedef struct	s_options
 	unsigned char loaded:1;
 }				t_options;
 
-typedef struct s_file
+typedef struct s_entry
 {
 	char *name;
 	struct stat *stat_buf;
-}				t_file;
-int 	get_args(int ac, char **argv, t_options* const options, t_list** paths_lst);
-int 	load_options(char *str, t_options * const options);
-int 	load_path(char *path, int path_len, t_list** paths_lst);
+}				t_entry;
+int		get_args(int ac, char **argv, t_options* const options, t_list** paths_lst);
+int		load_options(char *str, t_options * const options);
+int		load_path(char *path, int path_len, t_list** paths_lst);
+void	load_entry(char *path, t_list** paths_lst, t_options* const options);
 int 	usage_error(char option);
 void	format_time(char *str_date, char *buf);
 void	get_mode(mode_t m, char *buf);
 void	get_type(mode_t m ,char *buf);
-void	read_dir(char *path, t_list **paths_lst);
+void	read_dir(char *path, t_list **paths_lst, t_options* const  options);
 void	print_paths_lst(t_list *paths_lst);
 int		alpha_sort(t_list* a, t_list* b);
 int		last_modif_time_sort(t_list* a, t_list*b);
-void	free_t_file(t_list *node);
-t_list	*del_dot_files(t_list *curr_node);
+void	free_t_entry(t_entry *entry);
+t_entry	*get_t_entry(char *path, t_options* const options);
+t_list	*del_dot_entries(t_list *paths_lst);
+void	show_error(char *path);
 
 #endif

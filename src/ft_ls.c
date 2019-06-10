@@ -6,27 +6,32 @@
 /*   By: lpersin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 13:01:31 by lpersin           #+#    #+#             */
-/*   Updated: 2019/04/29 16:33:44 by lpersin          ###   ########.fr       */
+/*   Updated: 2019/06/10 17:33:06 by lpersin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
 
-void default_ls(t_list *paths_lst)
+void default_ls(t_list *paths_lst, t_options* const options)
 {
-		read_dir(".", &paths_lst);
-		del_dot_files(paths_lst);
+		read_dir(".", &paths_lst, options);
+		ft_putstr("LOOL");
+		paths_lst = del_dot_entries(paths_lst);
+		ft_putstr("LAAAL");
 		ft_alpha_sortlst(&paths_lst);
+		print_paths_lst(paths_lst);
+		ft_putstr("\n\n");
+		//ft_fct_sortlst(&paths_lst, alpha_sort);
 		print_paths_lst(paths_lst);
 }
 
-void options_ls(t_list *paths_lst, t_options *options)
+void options_ls(t_list *paths_lst, t_options* const options)
 {
 	if (paths_lst == NULL)
-		read_dir(".", &paths_lst);
+		read_dir(".", &paths_lst, options);
 	if (options->a == 0)
-		del_dot_files(paths_lst);
+		paths_lst = del_dot_entries(paths_lst);
 	if (options->t == 1)
 		ft_fct_sortlst(&paths_lst, &last_modif_time_sort);
 	if (options->r == 1)
@@ -39,18 +44,18 @@ int main(int argc, char **argv)
 	t_options *options;
 
 	paths_lst = NULL;
+	options = (t_options*)malloc(sizeof(t_options));
 	if (argc > 1)
 	{
-		options = (t_options*)malloc(sizeof(t_options));
 		get_args(argc, argv, options, &paths_lst);
-		get_t_dir();
-		if (options->R == 1)
-			recursive_ls();
-		else
-			options_ls(paths_lst, options);
+		//get_t_dir();
+		//if (options->R == 1)
+		//	recursive_ls();
+		//else
+		//	options_ls(paths_lst, options);
 	}
 	else
-		default_ls(paths_lst);
+		default_ls(paths_lst, options);
 	
 /*
 	DIR *dir_p = opendir(".");
