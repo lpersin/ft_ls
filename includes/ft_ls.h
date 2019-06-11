@@ -41,7 +41,6 @@ typedef struct s_entry
 }				t_entry;
 int		get_args(int ac, char **argv, t_options* const options, t_list** paths_lst);
 int		load_options(char *str, t_options * const options);
-int		load_path(char *path, int path_len, t_list** paths_lst);
 void	load_entry(char *path, t_list** paths_lst, t_options* const options);
 int 	usage_error(char option);
 void	format_time(char *str_date, char *buf);

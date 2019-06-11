@@ -16,13 +16,8 @@
 void default_ls(t_list *paths_lst, t_options* const options)
 {
 		read_dir(".", &paths_lst, options);
-		ft_putstr("BEFORE\n");
-		print_paths_lst(paths_lst);
-		//paths_lst = ft_lst_del_occurences(paths_lst, is_dot_entry, free_entry);
-		ft_putstr("\n\n");
+		paths_lst = ft_lst_del_occurences(paths_lst, is_dot_entry, free_entry);
 		ft_fct_sortlst(&paths_lst, alpha_sort);
-
-		ft_putstr("AFTER\n");
 		print_paths_lst(paths_lst);
 }
 

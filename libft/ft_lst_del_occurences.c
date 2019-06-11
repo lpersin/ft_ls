@@ -21,7 +21,6 @@ t_list *ft_lst_del_occurences(t_list *head, int (*target)(t_list*),
 		return NULL;
 	if ((*target)(head))
 	{
-		ft_putstr("SHEH\n");
 		tmp_node = head->next;
 		(*del)(head->content, head->content_size);
 		free(head);
