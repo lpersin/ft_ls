@@ -6,7 +6,7 @@
 /*   By: lpersin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 12:37:40 by lpersin           #+#    #+#             */
-/*   Updated: 2019/06/10 17:26:39 by lpersin          ###   ########.fr       */
+/*   Updated: 2019/06/11 15:52:55 by lpersin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,8 @@ void	read_dir(char *path, t_list **paths_lst, t_options* const  options);
 void	print_paths_lst(t_list *paths_lst);
 int		alpha_sort(t_list* a, t_list* b);
 int		last_modif_time_sort(t_list* a, t_list*b);
-void	free_t_entry(t_entry *entry);
 t_entry	*get_t_entry(char *path, t_options* const options);
-t_list	*del_dot_entries(t_list *paths_lst);
 void	show_error(char *path);
-
+int		is_dot_entry(t_list *node);
+void	free_entry(void *v_entry, size_t content_size);
 #endif

@@ -6,7 +6,7 @@
 /*   By: lpersin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 13:01:31 by lpersin           #+#    #+#             */
-/*   Updated: 2019/06/10 17:33:06 by lpersin          ###   ########.fr       */
+/*   Updated: 2019/06/11 15:49:20 by lpersin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@
 void default_ls(t_list *paths_lst, t_options* const options)
 {
 		read_dir(".", &paths_lst, options);
-		ft_putstr("LOOL");
-		paths_lst = del_dot_entries(paths_lst);
-		ft_putstr("LAAAL");
-		ft_alpha_sortlst(&paths_lst);
+		ft_putstr("BEFORE\n");
 		print_paths_lst(paths_lst);
+		//paths_lst = ft_lst_del_occurences(paths_lst, is_dot_entry, free_entry);
 		ft_putstr("\n\n");
-		//ft_fct_sortlst(&paths_lst, alpha_sort);
+		ft_fct_sortlst(&paths_lst, alpha_sort);
+
+		ft_putstr("AFTER\n");
 		print_paths_lst(paths_lst);
 }
 
@@ -31,7 +31,7 @@ void options_ls(t_list *paths_lst, t_options* const options)
 	if (paths_lst == NULL)
 		read_dir(".", &paths_lst, options);
 	if (options->a == 0)
-		paths_lst = del_dot_entries(paths_lst);
+		paths_lst = ft_lst_del_occurences(paths_lst, is_dot_entry, free_entry);
 	if (options->t == 1)
 		ft_fct_sortlst(&paths_lst, &last_modif_time_sort);
 	if (options->r == 1)

@@ -12,20 +12,17 @@ int last_modif_time_sort(t_list* a, t_list*b)
 			((t_entry*)a->content)->stat_buf->st_mtime);
 }
 
-t_list	*del_dot_entries(t_list *paths_lst)
+int is_dot_entry(t_list *node)
 {
-	ft_putstr(((t_entry*)paths_lst->content)->name);
-	if (paths_lst == NULL)
-		return NULL;
-	if (((t_entry*)paths_lst->content)->name[0] == '.')
-		return del_dot_entries(paths_lst->next);
-	paths_lst->next = del_dot_entries(paths_lst->next);
-	return paths_lst;
+	return (((t_entry*)node->content)->name[0] == '.');
 }
 
-
-void free_t_entry(t_entry *entry)
+void free_entry(void *v_entry, size_t content_size)
 {
-	ft_memdel((void**) &(entry->name));
-	ft_memdel((void**) &(entry->stat_buf));
+	t_entry *entry = (t_entry*)v_entry;
+	if (content_size)
+	{
+		ft_memdel((void**) &(entry->name));
+		ft_memdel((void**) &(entry->stat_buf));
+	}
 }
