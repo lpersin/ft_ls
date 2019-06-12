@@ -20,6 +20,8 @@ void	ft_lstdelone(t_list **alst, void (*del)(void*, size_t))
 	if (alst && node)
 	{
 		(*del)(node->content, node->content_size);
+		free(node->content);
+		node->content = NULL;
 		free(node);
 		*alst = NULL;
 	}

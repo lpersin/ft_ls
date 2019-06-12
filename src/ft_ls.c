@@ -15,22 +15,25 @@
 
 void default_ls(t_list *paths_lst, t_options* const options)
 {
-		read_dir(".", &paths_lst, options);
-		paths_lst = ft_lst_del_occurences(paths_lst, is_dot_entry, free_entry);
-		ft_fct_sortlst(&paths_lst, alpha_sort);
+		read_dir(".", &paths_lst);
+		sort_entries(&paths_lst, options, 0);
 		print_paths_lst(paths_lst);
 }
 
 void options_ls(t_list *paths_lst, t_options* const options)
 {
-	if (paths_lst == NULL)
-		read_dir(".", &paths_lst, options);
-	if (options->a == 0)
-		paths_lst = ft_lst_del_occurences(paths_lst, is_dot_entry, free_entry);
-	if (options->t == 1)
-		ft_fct_sortlst(&paths_lst, &last_modif_time_sort);
-	if (options->r == 1)
-		ft_lstrev(&paths_lst);
+	t_list *current_entries;
+
+	current_entries = NULL;
+	while(paths_lst != NULL)
+	{
+		read_dir(((t_entry*)paths_lst->content)->name, &current_entries); 
+		sort_entries(&current_entries, options, 0);
+		print_paths_lst(current_entries);
+		ft_putstr("\n");
+		free_entries_lst(&current_entries);
+		paths_lst = paths_lst->next;
+	}
 }
 
 int main(int argc, char **argv)
@@ -39,15 +42,13 @@ int main(int argc, char **argv)
 	t_options *options;
 
 	paths_lst = NULL;
-	options = (t_options*)malloc(sizeof(t_options));
+	if((options = (t_options*)malloc(sizeof(t_options)))== NULL)
+		show_error("args", 1);
 	if (argc > 1)
 	{
 		get_args(argc, argv, options, &paths_lst);
-		//get_t_dir();
-		//if (options->R == 1)
-		//	recursive_ls();
-		//else
-		//	options_ls(paths_lst, options);
+		sort_entries(&paths_lst, options, 1);
+		options_ls(paths_lst, options);
 	}
 	else
 		default_ls(paths_lst, options);

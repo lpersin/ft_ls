@@ -1,6 +1,6 @@
 #include "ft_ls.h"
 
-int get_args(int ac, char **av, t_options* const options, t_list** paths_lst)
+void get_args(int ac, char **av, t_options* const options, t_list** paths_lst)
 {
 	int i;
 
@@ -14,17 +14,16 @@ int get_args(int ac, char **av, t_options* const options, t_list** paths_lst)
 		else
 		{
 			options->loaded = 1;
-			load_entry(av[i], paths_lst, options);
+			load_entry(av[i], paths_lst);
 		}
 		i++;
 	}
-	return 0;
 }
 
-int load_options(char *str, t_options* const options)
+void load_options(char *str, t_options* const options)
 {
 	if (options == NULL)
-		return 1;
+		show_error("Problem loading args", 1);
 	while (*str)
 	{
 		if (*str == 'l')
@@ -38,10 +37,9 @@ int load_options(char *str, t_options* const options)
 		else if (*str == 't')
 			options->t = 1;
 		else
-			return (usage_error(*str));
+			usage_error(*str);
 		str++;
 	}
-	return (0);
 }
 
 
