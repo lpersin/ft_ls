@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   read.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lpersin <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/06/13 17:03:23 by lpersin           #+#    #+#             */
+/*   Updated: 2019/06/13 17:03:26 by lpersin          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 
 void	read_dir(char *path, t_list **paths_lst)
@@ -5,9 +17,11 @@ void	read_dir(char *path, t_list **paths_lst)
 	DIR *dir_p;
 	struct dirent* dp;
 
-	if((dir_p = opendir(path)) != NULL)
+	if((dir_p = opendir(path)) != NULL){
 		while ((dp = readdir(dir_p)) != NULL)
 			load_entry(dp->d_name, paths_lst);
+		closedir(dir_p);
+	}
 	else
 		show_error(path, 0);
 }
@@ -23,9 +37,9 @@ t_entry	*get_t_entry(char *path)
 			show_error(path, 1);
 		if ((entry->name = ft_strdup(path)) == NULL)
 			show_error(path, 1);
-		if((entry->stat_buf = (struct stat*)malloc(sizeof(struct stat))) == NULL)
+		if((entry->stat = (struct stat*)malloc(sizeof(struct stat))) == NULL)
 			show_error(path, 1);
-		stat(path, entry->stat_buf);
+		stat(path, entry->stat);
 	}
 	return entry;
 }
@@ -42,4 +56,5 @@ void load_entry(char *path, t_list** paths_lst)
 		*paths_lst = node;
 	else
 		ft_lstadd(paths_lst, node);
+	free(entry);
 }

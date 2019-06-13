@@ -37,7 +37,7 @@ typedef struct	s_options
 typedef struct s_entry
 {
 	char *name;
-	struct stat *stat_buf;
+	struct stat *stat;
 }				t_entry;
 void		get_args(int ac, char **argv, t_options* const options, t_list** paths_lst);
 void		load_options(char *str, t_options * const options);
@@ -56,4 +56,8 @@ int		is_dot_entry(t_list *node);
 void	free_entry(void *v_entry, size_t content_size);
 void	sort_entries(t_list **entries_lst, t_options* const options, char user_path);
 void	free_entries_lst(t_list **entries_lst);
+void	init_options(t_options *options);
+void	print_dir_path(char *path, int one_entry);
+int 	is_dir(t_list *node);
+
 #endif

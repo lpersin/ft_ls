@@ -23,8 +23,6 @@ t_list *ft_lst_del_occurences(t_list *head, int (*target)(t_list*),
 	{
 		tmp_node = head->next;
 		(*del)(head->content, head->content_size);
-		free(head->content);
-		head->content = NULL;
 		free(head);
 		head = NULL;
 		return ft_lst_del_occurences(tmp_node, target, del);

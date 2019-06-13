@@ -11,8 +11,6 @@ SOURCES := $(wildcard $(SRCDIR)/*.c)
 OBJECTS := $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 EXEC = ft_ls
 
-LIBSOURCES := $(wildcard $(LIBDIR)/*.c)
-LIBOBJECTS := $(LIBSOURCES:$(LIBDIR)/%.c=$(LIBDIR)/%.o) 
 LIB = libft.a
 
 all: $(LIBDIR)/$(LIB) $(BINDIR)/$(EXEC) 
@@ -23,19 +21,17 @@ $(BINDIR)/$(EXEC): $(OBJECTS)
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(LIBDIR)/$(LIB) : $(LIBOBJECTS) 
-	cd $(LIBDIR) && make
-
-$(LIBOBJECTS) :$(LIBDIR)/%.o : $(LIBDIR)/%.c
+$(LIBDIR)/$(LIB) :
+	$(MAKE) -C $(LIBDIR)
 
 .PHONY: clean fclean re
 
 clean:
-	cd $(LIBDIR) && make clean
+	$(MAKE) clean -C  $(LIBDIR)
 	/bin/rm -rf $(OBJECTS)
 
 fclean: clean
-	cd $(LIBDIR) && make fclean
+	$(MAKE) fclean -C  $(LIBDIR)
 	/bin/rm -rf $(BINDIR)/$(EXEC)
 
 re: fclean all

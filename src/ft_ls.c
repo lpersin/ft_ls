@@ -12,28 +12,44 @@
 
 #include "ft_ls.h"
 
-
 void default_ls(t_list *paths_lst, t_options* const options)
 {
 		read_dir(".", &paths_lst);
 		sort_entries(&paths_lst, options, 0);
 		print_paths_lst(paths_lst);
+		free_entries_lst(&paths_lst);
 }
 
-void options_ls(t_list *paths_lst, t_options* const options)
+void options_ls(t_list *paths_lst, t_options* const options, int one_entry)
 {
 	t_list *current_entries;
+	t_list *head;
+	t_list *tmp_node;
 
+	head = paths_lst;
 	current_entries = NULL;
 	while(paths_lst != NULL)
 	{
 		read_dir(((t_entry*)paths_lst->content)->name, &current_entries); 
 		sort_entries(&current_entries, options, 0);
+		print_dir_path(((t_entry*)paths_lst->content)->name, one_entry);
 		print_paths_lst(current_entries);
-		ft_putstr("\n");
+		if (paths_lst->next != NULL)
+			ft_putstr("\n");
+		if(options->R)
+		{
+			tmp_node = current_entries; 
+			while (tmp_node != NULL)
+			{
+				if (is_dir(tmp_node))
+					options_ls(tmp_node, options, 0);
+				tmp_node = tmp_node->next;
+			}
+		}
 		free_entries_lst(&current_entries);
 		paths_lst = paths_lst->next;
 	}
+	free_entries_lst(&head);
 }
 
 int main(int argc, char **argv)
@@ -44,15 +60,16 @@ int main(int argc, char **argv)
 	paths_lst = NULL;
 	if((options = (t_options*)malloc(sizeof(t_options)))== NULL)
 		show_error("args", 1);
+	init_options(options);
 	if (argc > 1)
 	{
 		get_args(argc, argv, options, &paths_lst);
 		sort_entries(&paths_lst, options, 1);
-		options_ls(paths_lst, options);
+		options_ls(paths_lst, options, (paths_lst->next == NULL));
 	}
 	else
 		default_ls(paths_lst, options);
-	
+	free(options);
 /*
 	DIR *dir_p = opendir(".");
 	struct dirent* dp;

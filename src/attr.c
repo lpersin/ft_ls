@@ -69,4 +69,8 @@ void	get_type(mode_t m, char *buf)
 		buf[0] = 'X';
 }
 
+int is_dir(t_list *node)
+{
+	return ((((t_entry*)node->content)->stat->st_mode & S_IFMT) == S_IFDIR);
+}
 

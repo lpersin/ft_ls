@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sort.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lpersin <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/06/13 17:03:29 by lpersin           #+#    #+#             */
+/*   Updated: 2019/06/13 17:03:31 by lpersin          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 
 int	alpha_sort(t_list* a, t_list* b)
@@ -8,8 +20,8 @@ int	alpha_sort(t_list* a, t_list* b)
 
 int last_modif_time_sort(t_list* a, t_list*b)
 {
-	return ((int) ((t_entry*)b->content)->stat_buf->st_mtime - 
-			((t_entry*)a->content)->stat_buf->st_mtime);
+	return ((int) ((t_entry*)b->content)->stat->st_mtime - 
+			((t_entry*)a->content)->stat->st_mtime);
 }
 
 int is_dot_entry(t_list *node)
@@ -28,3 +40,5 @@ void sort_entries(t_list **entries_lst, t_options* const options, char user_path
 	if (options->r == 1)
 		ft_lstrev(entries_lst);
 }
+
+
