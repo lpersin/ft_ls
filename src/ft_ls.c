@@ -34,22 +34,26 @@ void options_ls(t_list *paths_lst, t_options* const options, int one_entry)
 		sort_entries(&current_entries, options, 0);
 		print_dir_path(((t_entry*)paths_lst->content)->name, one_entry);
 		print_paths_lst(current_entries);
-		if (paths_lst->next != NULL)
-			ft_putstr("\n");
+		ft_putstr("\n"); 
+		if (paths_lst->next != NULL || one_entry)
+			ft_putstr("");
 		if(options->R)
 		{
 			tmp_node = current_entries; 
 			while (tmp_node != NULL)
 			{
-				if (is_dir(tmp_node))
-					options_ls(tmp_node, options, 0);
+				if (is_dir(tmp_node)){
+					ft_putstr(((t_entry*)tmp_node->content)->name);
+					ft_putstr("\n");
+					options_ls(tmp_node, options, 0);    //doit passer le chemin entier ici
+				}
 				tmp_node = tmp_node->next;
 			}
 		}
 		free_entries_lst(&current_entries);
 		paths_lst = paths_lst->next;
 	}
-	free_entries_lst(&head);
+	//free_entries_lst(&head);
 }
 
 int main(int argc, char **argv)
@@ -61,11 +65,12 @@ int main(int argc, char **argv)
 	if((options = (t_options*)malloc(sizeof(t_options)))== NULL)
 		show_error("args", 1);
 	init_options(options);
-	if (argc > 1)
+	get_args(argc, argv, options, &paths_lst);
+	if (paths_lst != NULL)
 	{
-		get_args(argc, argv, options, &paths_lst);
 		sort_entries(&paths_lst, options, 1);
 		options_ls(paths_lst, options, (paths_lst->next == NULL));
+		free_entries_lst(&paths_lst);
 	}
 	else
 		default_ls(paths_lst, options);

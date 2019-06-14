@@ -17,13 +17,29 @@ void	read_dir(char *path, t_list **paths_lst)
 	DIR *dir_p;
 	struct dirent* dp;
 
-	if((dir_p = opendir(path)) != NULL){
+	if((dir_p = opendir(path)) != NULL)
+	{
 		while ((dp = readdir(dir_p)) != NULL)
+		{
 			load_entry(dp->d_name, paths_lst);
+		}
 		closedir(dir_p);
 	}
 	else
 		show_error(path, 0);
+}
+
+
+char *full_path(char *path, char* suffix)
+{
+	char *str;
+
+	if(suffix == NULL)
+		return path;
+	str = ft_strjoin(suffix, "/");
+	str = ft_strjoin(str, path);
+
+	return str;
 }
 
 t_entry	*get_t_entry(char *path)

@@ -74,3 +74,8 @@ int is_dir(t_list *node)
 	return ((((t_entry*)node->content)->stat->st_mode & S_IFMT) == S_IFDIR);
 }
 
+int is_dot_dir(t_list *node)
+{
+	return (!ft_strcmp(((t_entry*)node->content)->name, "..") ||  !ft_strcmp(((t_entry*)node->content)->name, "."));
+}
+

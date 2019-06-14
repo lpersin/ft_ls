@@ -59,5 +59,7 @@ void	free_entries_lst(t_list **entries_lst);
 void	init_options(t_options *options);
 void	print_dir_path(char *path, int one_entry);
 int 	is_dir(t_list *node);
+int		is_dot_dir(t_list *node);
+char	*full_path(char *path, char* suffix);
 
 #endif
