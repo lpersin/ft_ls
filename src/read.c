@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   read.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lpersin <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/06/13 17:03:23 by lpersin           #+#    #+#             */
+/*   Updated: 2019/06/13 17:03:26 by lpersin          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 
 void	read_dir(char *path, t_list **paths_lst)
@@ -5,29 +17,60 @@ void	read_dir(char *path, t_list **paths_lst)
 	DIR *dir_p;
 	struct dirent* dp;
 
-	dir_p = opendir(path);
-	while ((dp = readdir(dir_p)) != NULL)
+	if((dir_p = opendir(path)) != NULL)
 	{
-		load_path(dp->d_name, ft_strlen(dp->d_name), paths_lst);  //error management here if load_path fails											//replace ft_strlen by dp->d_namlen on Mac
+		while ((dp = readdir(dir_p)) != NULL)
+		{
+			load_entry(dp->d_name, paths_lst);
+		}
+		closedir(dir_p);
 	}
-}
-
-void	print_paths_lst(t_list *paths_lst)
-{
-	while (paths_lst != NULL)
-	{
-		ft_node_to_str(paths_lst);
-		ft_putstr("\n");
-		paths_lst = paths_lst->next;
-	}	
-}
-
-t_file	*get_t_file(char * path)
-{
-	t_file	*del_dot_files;
-
-	if (paths_lst == NULL)
-		path = ".";
 	else
+		show_error(path, 0);
+}
 
+
+char *full_path(char *path, char* suffix)
+{
+	char *str;
+
+	if(suffix == NULL)
+		return path;
+	str = ft_strjoin(suffix, "/");
+	str = ft_strjoin(str, path);
+
+	return str;
+}
+
+t_entry	*get_t_entry(char *path)
+{
+	t_entry	*entry;
+
+	entry = NULL;
+	if (path != NULL)
+	{
+		if ((entry = (t_entry*)malloc(sizeof(t_entry))) == NULL)
+			show_error(path, 1);
+		if ((entry->name = ft_strdup(path)) == NULL)
+			show_error(path, 1);
+		if((entry->stat = (struct stat*)malloc(sizeof(struct stat))) == NULL)
+			show_error(path, 1);
+		stat(path, entry->stat);
+	}
+	return entry;
+}
+
+void load_entry(char *path, t_list** paths_lst)
+{
+	t_list*		node;
+	t_entry*	entry;
+
+	entry = get_t_entry(path);
+	if ((node = ft_lstnew(entry, sizeof(t_entry))) == NULL)
+		show_error(path, 1);
+	if (*paths_lst == NULL)
+		*paths_lst = node;
+	else
+		ft_lstadd(paths_lst, node);
+	free(entry);
 }

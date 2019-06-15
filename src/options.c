@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   options.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lpersin <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/06/13 17:02:59 by lpersin           #+#    #+#             */
+/*   Updated: 2019/06/13 17:03:05 by lpersin          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 
-int get_args(int ac, char **av, t_options* const options, t_list** paths_lst)
+void get_args(int ac, char **av, t_options* const options, t_list** paths_lst)
 {
 	int i;
 
@@ -14,17 +26,16 @@ int get_args(int ac, char **av, t_options* const options, t_list** paths_lst)
 		else
 		{
 			options->loaded = 1;
-			load_path(av[i], ft_strlen(av[i]), paths_lst);
+			load_entry(av[i], paths_lst);
 		}
 		i++;
 	}
-	return 0;
 }
 
-int load_options(char *str, t_options* const options)
+void load_options(char *str, t_options* const options)
 {
 	if (options == NULL)
-		return 1;
+		show_error("Problem loading args", 1);
 	while (*str)
 	{
 		if (*str == 'l')
@@ -38,21 +49,9 @@ int load_options(char *str, t_options* const options)
 		else if (*str == 't')
 			options->t = 1;
 		else
-			return (usage_error(*str));
+			usage_error(*str);
 		str++;
 	}
-	return (0);
 }
 
-int load_path(char *path, int path_len, t_list** paths_lst)
-{
-	t_list* node;
 
-	if ((node = ft_lstnew(path, path_len + 1)) == NULL)
-		return (1); //use strerror here
-	if (*paths_lst == NULL)
-		*paths_lst = node;
-	else
-		ft_lstadd(paths_lst, node);
-	return (0);
-}

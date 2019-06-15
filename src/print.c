@@ -1,30 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.c                                           :+:      :+:    :+:   */
+/*   print.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lpersin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/06/13 17:02:33 by lpersin           #+#    #+#             */
-/*   Updated: 2019/06/13 17:03:53 by lpersin          ###   ########.fr       */
+/*   Created: 2019/06/13 17:03:15 by lpersin           #+#    #+#             */
+/*   Updated: 2019/06/13 17:03:20 by lpersin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void usage_error(char option)
+void	print_paths_lst(t_list *paths_lst)
 {
-	ft_putstr("ls: illegal option -- ");
-	ft_putchar(option);
-	ft_putchar('\n');
-	ft_putstr("usage: ls [-lRart] [file ...]\n");
-	exit(1);
+	while (paths_lst != NULL)
+	{
+		ft_putstr(((t_entry*)paths_lst->content)->name);
+		if (paths_lst->next != NULL)
+			ft_putstr("\n");
+		paths_lst = paths_lst->next;
+	}
 }
 
-void show_error(char *path, int die)
+void print_dir_path(char *path, int one_entry)
 {
-	ft_putstr("ls: ");
-	perror(path);
-	if (die)
-		exit(die);
+	if(!one_entry)
+	{
+		ft_putstr(path);
+		ft_putstr(":\n");
+	}
 }

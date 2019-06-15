@@ -1,35 +1,44 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sort.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lpersin <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/06/13 17:03:29 by lpersin           #+#    #+#             */
+/*   Updated: 2019/06/13 17:03:31 by lpersin          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 
 int	alpha_sort(t_list* a, t_list* b)
 {
-	return (ft_strcmp(((t_file*)a->content)->name, ((t_file*)b->content)->name));
+	return (ft_strcmp(((t_entry*)a->content)->name, 
+				((t_entry*)b->content)->name));
 }
 
 int last_modif_time_sort(t_list* a, t_list*b)
 {
-	return ((int) ((t_file*)b->content)->stat_buf->st_mtime - ((t_file*)a->content)->stat_buf->st_mtime);
+	return ((int) ((t_entry*)b->content)->stat->st_mtime - 
+			((t_entry*)a->content)->stat->st_mtime);
 }
 
-t_list	*del_dot_files(t_list *curr_node)
+int is_dot_entry(t_list *node)
 {
-	t_list *tmp_nxt_node;
-
-	if (curr_node == NULL)
-		return NULL;
-	if (((t_file*)(curr_node->content))->name[0] == '.')
-	{
-		tmp_nxt_node = curr_node->next;
-		free_t_file(curr_node);
-		free(curr_node);
-		return tmp_nxt_node;
-	}
-	curr_node->next = del_dot_files(curr_node->next);
-	return curr_node;
+	return (((t_entry*)node->content)->name[0] == '.');
 }
 
-
-void free_t_file(t_list *node)
+void sort_entries(t_list **entries_lst, t_options* const options, char user_path)
 {
-	free(((t_file*)node->content)->name);
-	free(((t_file*)node->content)->stat_buf);
+	if (options->a == 0 && !user_path)
+		*entries_lst = ft_lst_del_occurences(*entries_lst, is_dot_entry, free_entry);
+	if (options->t == 1)
+		ft_fct_sortlst(entries_lst, last_modif_time_sort);
+	else
+		ft_fct_sortlst(entries_lst, alpha_sort);
+	if (options->r == 1)
+		ft_lstrev(entries_lst);
 }
+
+

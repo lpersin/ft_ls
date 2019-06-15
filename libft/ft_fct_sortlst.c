@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_fct_sortlst.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lpersin <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/06/11 14:36:29 by lpersin           #+#    #+#             */
+/*   Updated: 2019/06/11 16:15:25 by lpersin          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
 static	void	front_back_split(t_list *source, t_list **front_ref,
@@ -54,7 +66,7 @@ void			ft_fct_sortlst(t_list **head_ref, int (*f)(t_list*, t_list*))
 	if (head == NULL || head->next == NULL)
 		return ;
 	front_back_split(head, &a, &b);
-	ft_alpha_sortlst(&a);
-	ft_alpha_sortlst(&b);
+	ft_fct_sortlst(&a, f);
+	ft_fct_sortlst(&b, f);
 	*head_ref = sorted_merge(a, b, f);
 }

@@ -1,28 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
+/*   ft_lst_del_occurences.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lpersin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/06/28 13:47:01 by lpersin           #+#    #+#             */
-/*   Updated: 2018/06/28 14:00:55 by lpersin          ###   ########.fr       */
+/*   Created: 2019/06/11 14:38:40 by lpersin           #+#    #+#             */
+/*   Updated: 2019/06/11 15:43:11 by lpersin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstdelone(t_list **alst, void (*del)(void*, size_t))
+t_list *ft_lst_del_occurences(t_list *head, int (*target)(t_list*), 
+								void (*del)(void*, size_t))
 {
-	t_list *node;
+	t_list *tmp_node;
 
-	node = *alst;
-	if (alst && node)
+	if (head == NULL)
+		return NULL;
+	if ((*target)(head))
 	{
-		(*del)(node->content, node->content_size);
-		free(node->content);
-		node->content = NULL;
-		free(node);
-		*alst = NULL;
+		tmp_node = head->next;
+		(*del)(head->content, head->content_size);
+		free(head);
+		head = NULL;
+		return ft_lst_del_occurences(tmp_node, target, del);
 	}
+	head->next = ft_lst_del_occurences(head->next, target, del);
+	return head;
 }
