@@ -12,7 +12,7 @@
 
 #include "ft_ls.h"
 
-void	read_dir(char *path, t_list **paths_lst)
+void	read_dir(char *path, t_list **paths_lst, char *error)
 {
 	DIR *dir_p;
 	struct dirent* dp;
@@ -26,10 +26,11 @@ void	read_dir(char *path, t_list **paths_lst)
 		closedir(dir_p);
 	}
 	else
+	{
+		*error = 1;
 		show_error(path, 0);
-
+	}
 }
-
 
 char *full_path(char *path, char* suffix)
 {
@@ -37,6 +38,7 @@ char *full_path(char *path, char* suffix)
 	char *tmp;
 
 	str = NULL;
+	tmp = NULL;
 	if(suffix == NULL)
 		return ft_strdup(path);
 	if((str = ft_strjoin(suffix, "/")) != NULL)

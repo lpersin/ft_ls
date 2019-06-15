@@ -13,11 +13,14 @@
 #include "ft_ls.h"
 
 void default_ls(t_list *paths_lst, t_options* const options)
-{
-		read_dir(".", &paths_lst);
-		sort_entries(&paths_lst, options, 0);
-		print_paths_lst(paths_lst);
-		free_entries_lst(&paths_lst);
+{	
+	char error;
+
+	error = 0;
+	read_dir(".", &paths_lst, &error);
+	sort_entries(&paths_lst, options, 0);
+	print_paths_lst(paths_lst);
+	free_entries_lst(&paths_lst);
 }
 
 t_list *load_full_path(t_list *node, char *str)
@@ -35,13 +38,16 @@ t_list *load_full_path(t_list *node, char *str)
 void options_ls(char *path, t_options* const options, int one_entry)
 {
 	t_list	*current_entries;
+	char	error;
 
+	error = 0;
 	current_entries = NULL;
-	read_dir(path, &current_entries); 
-	sort_entries(&current_entries, options, 0);
 	print_dir_path(path, one_entry);
+	read_dir(path, &current_entries, &error); 
+	sort_entries(&current_entries, options, 0);
 	print_paths_lst(current_entries);
-	ft_putstr("\n");
+	if(!error)
+		ft_putstr("\n");
 	if(options->R)
 		recursive_ls(path, current_entries, options);
 	free_entries_lst(&current_entries);

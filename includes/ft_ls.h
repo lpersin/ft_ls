@@ -47,7 +47,7 @@ void	usage_error(char option);
 void	format_time(char *str_date, char *buf);
 void	get_mode(mode_t m, char *buf);
 void	get_type(mode_t m ,char *buf);
-void	read_dir(char *path, t_list **paths_lst);
+void	read_dir(char *path, t_list **paths_lst, char *error);
 void	print_paths_lst(t_list *paths_lst);
 int		alpha_sort(t_list* a, t_list* b);
 int		last_modif_time_sort(t_list* a, t_list*b);
