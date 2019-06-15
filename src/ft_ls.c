@@ -35,8 +35,6 @@ t_list *load_full_path(t_list *node, char *str)
 void options_ls(char *path, t_options* const options, int one_entry)
 {
 	t_list	*current_entries;
-	t_list	*tmp_node;
-	char 	*tmp_path;
 
 	current_entries = NULL;
 	read_dir(path, &current_entries); 
@@ -45,22 +43,28 @@ void options_ls(char *path, t_options* const options, int one_entry)
 	print_paths_lst(current_entries);
 	ft_putstr("\n");
 	if(options->R)
-	{
-		tmp_node = current_entries; 
-		while (tmp_node != NULL)
-		{
-			tmp_node = load_full_path(tmp_node, path);
-			tmp_path = ((t_entry*)tmp_node->content)->name;
-			if (is_dir(tmp_node) && !is_dot_dir(tmp_node))
-			{
-				tmp_path = ((t_entry*)tmp_node->content)->name;
-				ft_putstr("\n");
-				options_ls(tmp_path, options, 0);
-			}
-			tmp_node = tmp_node->next;
-		}
-	}
+		recursive_ls(path, current_entries, options);
 	free_entries_lst(&current_entries);
+}
+
+void	recursive_ls(char *path, t_list* current_entries, t_options* const options)
+{
+	char 	*tmp_path;
+
+	while (current_entries != NULL)
+	{
+		if(!is_dot_dir(current_entries))
+		{
+			current_entries = load_full_path(current_entries, path);
+			tmp_path = ((t_entry*)current_entries->content)->name;
+		}
+		if (is_dir(current_entries) && !is_dot_dir(current_entries))
+		{
+			ft_putstr("\n");
+			options_ls(tmp_path, options, 0);
+		}
+		current_entries = current_entries->next;
+	}
 }
 
 int main(int argc, char **argv)

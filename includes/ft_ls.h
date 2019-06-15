@@ -62,5 +62,6 @@ void	print_dir_path(char *path, int one_entry);
 int 	is_dir(t_list *node);
 int		is_dot_dir(t_list *node);
 char	*full_path(char *path, char* suffix);
+void	recursive_ls(char *path, t_list* current_entries, t_options* const options);
 
 #endif

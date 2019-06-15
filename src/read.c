@@ -27,6 +27,7 @@ void	read_dir(char *path, t_list **paths_lst)
 	}
 	else
 		show_error(path, 0);
+
 }
 
 
@@ -35,11 +36,14 @@ char *full_path(char *path, char* suffix)
 	char *str;
 	char *tmp;
 
+	str = NULL;
 	if(suffix == NULL)
-		return path;
-	str = ft_strjoin(suffix, "/");
-	tmp = str;
-	str = ft_strjoin(str, path);
+		return ft_strdup(path);
+	if((str = ft_strjoin(suffix, "/")) != NULL)
+	{
+		tmp = str;
+		str = ft_strjoin(str, path);
+	}
 	free(tmp);
 
 	return str;
