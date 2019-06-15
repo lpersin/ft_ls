@@ -32,17 +32,17 @@ void options_ls(t_list *paths_lst, t_options* const options, int one_entry)
 	{
 		read_dir(((t_entry*)paths_lst->content)->name, &current_entries); 
 		sort_entries(&current_entries, options, 0);
-		print_dir_path(((t_entry*)paths_lst->content)->name, one_entry);
-		print_paths_lst(current_entries);
-		ft_putstr("\n"); 
+		//print_dir_path(((t_entry*)paths_lst->content)->name, one_entry);
+		//print_paths_lst(current_entries);
+		//ft_putstr("\n"); 
 		if (paths_lst->next != NULL || one_entry)
-			ft_putstr("");
+		//	ft_putstr("");
 		if(options->R)
 		{
 			tmp_node = current_entries; 
 			while (tmp_node != NULL)
 			{
-				if (is_dir(tmp_node)){
+				if (is_dir(tmp_node) && !is_dot_dir(tmp_node)){
 					ft_putstr(((t_entry*)tmp_node->content)->name);
 					ft_putstr("\n");
 					options_ls(tmp_node, options, 0);    //doit passer le chemin entier ici
