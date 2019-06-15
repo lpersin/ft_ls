@@ -20,40 +20,53 @@ void default_ls(t_list *paths_lst, t_options* const options)
 		free_entries_lst(&paths_lst);
 }
 
-void options_ls(t_list *paths_lst, t_options* const options, int one_entry)
+t_list *load_full_path(t_list *node, char *str)
 {
-	t_list *current_entries;
-	t_list *head;
-	t_list *tmp_node;
+	t_entry *entry;
+	char	*tmp;
 
-	head = paths_lst;
+	entry = (t_entry*)node->content;
+	tmp = entry->name;
+	entry->name = full_path(entry->name, str);
+	free(tmp);
+	return node;
+}
+
+void options_ls(char *path, t_options* const options, int one_entry)
+{
+	t_list	*current_entries;
+	t_list	*tmp_node;
+	char 	*tmp_path;
+
 	current_entries = NULL;
-	while(paths_lst != NULL)
+	read_dir(path, &current_entries); 
+	sort_entries(&current_entries, options, 0);
+	print_dir_path(path, one_entry);
+	print_paths_lst(current_entries);
+	ft_putstr("\n");
+	if(options->R)
 	{
-		read_dir(((t_entry*)paths_lst->content)->name, &current_entries); 
-		sort_entries(&current_entries, options, 0);
-		//print_dir_path(((t_entry*)paths_lst->content)->name, one_entry);
-		//print_paths_lst(current_entries);
-		//ft_putstr("\n"); 
-		if (paths_lst->next != NULL || one_entry)
-		//	ft_putstr("");
-		if(options->R)
+		tmp_node = current_entries; 
+		while (tmp_node != NULL)
 		{
-			tmp_node = current_entries; 
-			while (tmp_node != NULL)
+			tmp_node = load_full_path(tmp_node, path);
+			tmp_path = ((t_entry*)tmp_node->content)->name;
+			ft_putstr(tmp_path);
+			ft_putstr("CLASH\n");
+			if (is_dir(tmp_node) && !is_dot_dir(tmp_node))
 			{
-				if (is_dir(tmp_node) && !is_dot_dir(tmp_node)){
-					ft_putstr(((t_entry*)tmp_node->content)->name);
-					ft_putstr("\n");
-					options_ls(tmp_node, options, 0);    //doit passer le chemin entier ici
-				}
-				tmp_node = tmp_node->next;
+				ft_putstr("\n");
+				tmp_path = ((t_entry*)tmp_node->content)->name;
+				ft_putstr(tmp_path);
+				ft_putstr("CLISH\n");
+				ft_putstr("In to Recursion");
+				options_ls(tmp_path, options, 0);    //doit passer le chemin entier ici
+				ft_putstr("Out of Recursion\n");
 			}
+			tmp_node = tmp_node->next;
 		}
-		free_entries_lst(&current_entries);
-		paths_lst = paths_lst->next;
 	}
-	//free_entries_lst(&head);
+	free_entries_lst(&current_entries);
 }
 
 int main(int argc, char **argv)
@@ -68,9 +81,12 @@ int main(int argc, char **argv)
 	get_args(argc, argv, options, &paths_lst);
 	if (paths_lst != NULL)
 	{
+		while(paths_lst != NULL)
+		{
 		sort_entries(&paths_lst, options, 1);
-		options_ls(paths_lst, options, (paths_lst->next == NULL));
+		options_ls(((t_entry*)paths_lst->content)->name, options, (paths_lst->next == NULL));
 		free_entries_lst(&paths_lst);
+		}
 	}
 	else
 		default_ls(paths_lst, options);
