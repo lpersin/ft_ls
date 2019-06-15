@@ -22,6 +22,7 @@
 # include <stdio.h>
 # include <sys/stat.h>
 # include <errno.h>
+# include <unistd.h>
 
 typedef struct	s_options
 {
@@ -41,7 +42,7 @@ typedef struct s_entry
 }				t_entry;
 void		get_args(int ac, char **argv, t_options* const options, t_list** paths_lst);
 void		load_options(char *str, t_options * const options);
-void	load_entry(char *path, t_list** paths_lst);
+void	load_entry(char *path, t_list** paths_lst, char *full_path);
 void	usage_error(char option);
 void	format_time(char *str_date, char *buf);
 void	get_mode(mode_t m, char *buf);
@@ -50,7 +51,7 @@ void	read_dir(char *path, t_list **paths_lst);
 void	print_paths_lst(t_list *paths_lst);
 int		alpha_sort(t_list* a, t_list* b);
 int		last_modif_time_sort(t_list* a, t_list*b);
-t_entry	*get_t_entry(char *path);
+t_entry	*get_t_entry(char *path, char *full_path);
 void	show_error(char *path, int die);
 int		is_dot_entry(t_list *node);
 void	free_entry(void *v_entry, size_t content_size);

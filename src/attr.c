@@ -51,19 +51,19 @@ void	get_mode(mode_t m, char *buf)
 
 void	get_type(mode_t m, char *buf)
 {
-	if ((m & S_IFMT) == S_IFREG)
+	if (S_ISREG(m))
 		buf[0] = '-';
-	else if ((m & S_IFMT) == S_IFDIR)
+	else if (S_ISDIR(m))
 		buf[0] = 'd';
-	else if ((m & S_IFMT) == S_IFCHR)
+	else if (S_ISCHR(m))
 		buf[0] = 'c';
-	else if ((m & S_IFMT) == S_IFBLK)
+	else if (S_ISBLK(m))
 		buf[0] = 'b';
-	else if ((m & S_IFMT) == S_IFIFO)
+	else if (S_ISFIFO(m))
 		buf[0] = 'p';
-	else if ((m & S_IFMT) == S_IFLNK)
+	else if (S_ISLNK(m))
 		buf[0] = 'l';
-	else if ((m & S_IFMT) == S_IFSOCK)
+	else if (S_ISSOCK(m))
 		buf[0] = 's';
 	else
 		buf[0] = 'X';
@@ -71,7 +71,7 @@ void	get_type(mode_t m, char *buf)
 
 int is_dir(t_list *node)
 {
-	return ((((t_entry*)node->content)->stat->st_mode & S_IFMT) == S_IFDIR);
+	return (S_ISDIR(((t_entry*)node->content)->stat->st_mode));
 }
 
 int is_dot_dir(t_list *node)

@@ -26,7 +26,7 @@ void get_args(int ac, char **av, t_options* const options, t_list** paths_lst)
 		else
 		{
 			options->loaded = 1;
-			load_entry(av[i], paths_lst);
+			load_entry(av[i], paths_lst, NULL);
 		}
 		i++;
 	}

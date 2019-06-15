@@ -51,17 +51,11 @@ void options_ls(char *path, t_options* const options, int one_entry)
 		{
 			tmp_node = load_full_path(tmp_node, path);
 			tmp_path = ((t_entry*)tmp_node->content)->name;
-			ft_putstr(tmp_path);
-			ft_putstr("CLASH\n");
 			if (is_dir(tmp_node) && !is_dot_dir(tmp_node))
 			{
-				ft_putstr("\n");
 				tmp_path = ((t_entry*)tmp_node->content)->name;
-				ft_putstr(tmp_path);
-				ft_putstr("CLISH\n");
-				ft_putstr("In to Recursion");
-				options_ls(tmp_path, options, 0);    //doit passer le chemin entier ici
-				ft_putstr("Out of Recursion\n");
+				ft_putstr("\n");
+				options_ls(tmp_path, options, 0);
 			}
 			tmp_node = tmp_node->next;
 		}
