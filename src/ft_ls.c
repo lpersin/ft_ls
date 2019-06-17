@@ -39,9 +39,7 @@ void options_ls(char *path, t_options* const options, int one_entry)
 	}
 	else
 	{
-		//should check if is dir here trough stat_buf	
 		read_dir(path, &current_entries, &error);
-		//should check if is dir here trough stat_buf -> send t_list struct to options_ls
 		print_dir_path(path, one_entry);
 		sort_entries(&current_entries, options, 0);
 		print_paths_lst(current_entries);
@@ -92,7 +90,8 @@ int main(int argc, char **argv)
 		sort_entries(&paths_lst, options, 1);
 		single_entry = (paths_lst->next == NULL);
 		//should separate files entries from dir entries here
-		//and print files entries first
+		//print bad paths
+		//and print files entries
 		head = paths_lst;
 		while(paths_lst != NULL)
 		{
