@@ -28,27 +28,19 @@ void options_ls(char *path, t_options* const options, int one_entry)
 {
 	t_list	*current_entries;
 	char	error;
-	struct	stat tmp_buf;
+	//struct	stat tmp_buf;
 
 	error = 0;
 	current_entries = NULL;
-	if(stat(path, &tmp_buf) == -1)
-	{
-		show_error(path, 0);
-		error = 1;
-	}
-	else
-	{
-		read_dir(path, &current_entries, &error);
-		print_dir_path(path, one_entry);
-		sort_entries(&current_entries, options, 0);
-		print_paths_lst(current_entries);
-		if(!error)
-			ft_putstr("\n");
-		if(options->R)
-			recursive_ls(path, current_entries, options);
-		free_entries_lst(&current_entries);
-	}
+	print_dir_path(path, one_entry);
+	read_dir(path, &current_entries, &error);
+	sort_entries(&current_entries, options, 0);
+	print_paths_lst(current_entries);
+	if(!error && !one_entry)
+		ft_putstr("\n");
+	if(options->R)
+		recursive_ls(path, current_entries, options);
+	free_entries_lst(&current_entries);
 }
 
 void	recursive_ls(char *path, t_list* current_entries, t_options* const options)
@@ -89,13 +81,12 @@ int main(int argc, char **argv)
 	{
 		sort_entries(&paths_lst, options, 1);
 		single_entry = (paths_lst->next == NULL);
-		//should separate files entries from dir entries here
-		//print bad paths
-		//and print files entries
 		head = paths_lst;
 		while(paths_lst != NULL)
 		{
 			options_ls(((t_entry*)paths_lst->content)->name, options, single_entry);
+			if(paths_lst->next != NULL)
+				ft_putstr("\n");
 			paths_lst = paths_lst->next;
 		}
 		free_entries_lst(&head);
