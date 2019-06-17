@@ -12,17 +12,6 @@
 
 #include "ft_ls.h"
 
-void default_ls(t_list *paths_lst, t_options* const options)
-{	
-	char error;
-
-	error = 0;
-	read_dir(".", &paths_lst, &error);
-	sort_entries(&paths_lst, options, 0);
-	print_paths_lst(paths_lst);
-	free_entries_lst(&paths_lst);
-}
-
 t_list *load_full_path(t_list *node, char *str)
 {
 	t_entry *entry;
@@ -39,18 +28,29 @@ void options_ls(char *path, t_options* const options, int one_entry)
 {
 	t_list	*current_entries;
 	char	error;
+	struct	stat tmp_buf;
 
 	error = 0;
 	current_entries = NULL;
-	print_dir_path(path, one_entry);
-	read_dir(path, &current_entries, &error); 
-	sort_entries(&current_entries, options, 0);
-	print_paths_lst(current_entries);
-	if(!error)
-		ft_putstr("\n");
-	if(options->R)
-		recursive_ls(path, current_entries, options);
-	free_entries_lst(&current_entries);
+	if(stat(path, &tmp_buf) == -1)
+	{
+		show_error(path, 0);
+		error = 1;
+	}
+	else
+	{
+		//should check if is dir here trough stat_buf	
+		read_dir(path, &current_entries, &error);
+		//should check if is dir here trough stat_buf -> send t_list struct to options_ls
+		print_dir_path(path, one_entry);
+		sort_entries(&current_entries, options, 0);
+		print_paths_lst(current_entries);
+		if(!error)
+			ft_putstr("\n");
+		if(options->R)
+			recursive_ls(path, current_entries, options);
+		free_entries_lst(&current_entries);
+	}
 }
 
 void	recursive_ls(char *path, t_list* current_entries, t_options* const options)
@@ -77,23 +77,30 @@ int main(int argc, char **argv)
 {
 	t_list *paths_lst;
 	t_options *options;
+	t_list	*head;
+	int		single_entry;
 
 	paths_lst = NULL;
 	if((options = (t_options*)malloc(sizeof(t_options)))== NULL)
 		show_error("args", 1);
 	init_options(options);
 	get_args(argc, argv, options, &paths_lst);
+	if(paths_lst == NULL)
+		load_entry(".", &paths_lst, NULL);
 	if (paths_lst != NULL)
 	{
+		sort_entries(&paths_lst, options, 1);
+		single_entry = (paths_lst->next == NULL);
+		//should separate files entries from dir entries here
+		//and print files entries first
+		head = paths_lst;
 		while(paths_lst != NULL)
 		{
-		sort_entries(&paths_lst, options, 1);
-		options_ls(((t_entry*)paths_lst->content)->name, options, (paths_lst->next == NULL));
-		free_entries_lst(&paths_lst);
+			options_ls(((t_entry*)paths_lst->content)->name, options, single_entry);
+			paths_lst = paths_lst->next;
 		}
+		free_entries_lst(&head);
 	}
-	else
-		default_ls(paths_lst, options);
 	free(options);
 /*
 	DIR *dir_p = opendir(".");

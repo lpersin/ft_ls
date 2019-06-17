@@ -40,8 +40,8 @@ typedef struct s_entry
 	char *name;
 	struct stat *stat;
 }				t_entry;
-void		get_args(int ac, char **argv, t_options* const options, t_list** paths_lst);
-void		load_options(char *str, t_options * const options);
+void	get_args(int ac, char **argv, t_options* const options, t_list** paths_lst);
+void	load_options(char *str, t_options * const options);
 void	load_entry(char *path, t_list** paths_lst, char *full_path);
 void	usage_error(char option);
 void	format_time(char *str_date, char *buf);
