@@ -17,6 +17,7 @@ t_list *ft_lst_del_occurences(t_list *head, int (*target)(t_list*),
 {
 	t_list *tmp_node;
 
+	tmp_node = NULL;
 	if (head == NULL)
 		return NULL;
 	if ((*target)(head))
