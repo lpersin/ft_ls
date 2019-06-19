@@ -34,7 +34,6 @@ typedef struct	s_options
 	char :2;
 	unsigned char loaded:1;
 }				t_options;
-
 typedef struct s_entry
 {
 	char *name;
@@ -63,5 +62,6 @@ int 	is_dir(t_list *node);
 int		is_dot_dir(t_list *node);
 char	*full_path(char *path, char* suffix);
 void	recursive_ls(char *path, t_list* current_entries, t_options* const options);
+t_list	*parse_user_args(t_list** head, t_options *options);
 
 #endif

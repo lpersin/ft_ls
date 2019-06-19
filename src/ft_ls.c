@@ -28,7 +28,6 @@ void options_ls(char *path, t_options* const options, int one_entry)
 {
 	t_list	*current_entries;
 	char	error;
-	//struct	stat tmp_buf;
 
 	error = 0;
 	current_entries = NULL;
@@ -36,7 +35,7 @@ void options_ls(char *path, t_options* const options, int one_entry)
 	read_dir(path, &current_entries, &error);
 	sort_entries(&current_entries, options, 0);
 	print_paths_lst(current_entries);
-	if(!error && !one_entry)
+	if(!error && current_entries != NULL)
 		ft_putstr("\n");
 	if(options->R)
 		recursive_ls(path, current_entries, options);
@@ -77,10 +76,11 @@ int main(int argc, char **argv)
 	get_args(argc, argv, options, &paths_lst);
 	if(paths_lst == NULL)
 		load_entry(".", &paths_lst, NULL);
+	single_entry = (paths_lst->next == NULL);
+	paths_lst = parse_user_args(&paths_lst, options);
 	if (paths_lst != NULL)
 	{
 		sort_entries(&paths_lst, options, 1);
-		single_entry = (paths_lst->next == NULL);
 		head = paths_lst;
 		while(paths_lst != NULL)
 		{
