@@ -42,6 +42,7 @@ void options_ls(char *path, t_options* const options, int one_entry)
 	free_entries_lst(&current_entries);
 }
 
+
 void	recursive_ls(char *path, t_list* current_entries, t_options* const options)
 {
 	char 	*tmp_path;
@@ -53,7 +54,7 @@ void	recursive_ls(char *path, t_list* current_entries, t_options* const options)
 			current_entries = load_full_path(current_entries, path);
 			tmp_path = ((t_entry*)current_entries->content)->name;
 		}
-		if (is_dir(current_entries) && !is_dot_dir(current_entries))
+		if (is_dir(current_entries) && !is_dot_dir(current_entries) && !is_symlink(current_entries))
 		{
 			ft_putstr("\n");
 			options_ls(tmp_path, options, 0);
@@ -61,6 +62,18 @@ void	recursive_ls(char *path, t_list* current_entries, t_options* const options)
 		current_entries = current_entries->next;
 	}
 }
+
+
+//Will have to get lstat for symlinks and print right info
+// void l_print(t_list *node)
+// {
+// 	t_entry *entry;
+// 	char*	str;
+
+// 	entry = ((t_entry*)node->content);
+	
+
+// }
 
 int main(int argc, char **argv)
 {

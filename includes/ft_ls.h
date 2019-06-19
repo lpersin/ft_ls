@@ -63,5 +63,6 @@ int		is_dot_dir(t_list *node);
 char	*full_path(char *path, char* suffix);
 void	recursive_ls(char *path, t_list* current_entries, t_options* const options);
 t_list	*parse_user_args(t_list** head, t_options *options);
+int		is_symlink(t_list* node);
 
 #endif

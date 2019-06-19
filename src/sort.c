@@ -51,3 +51,13 @@ void sort_entries(t_list **entries_lst, t_options* const options, char user_path
 	if (options->r == 1)
 		ft_lstrev(entries_lst);
 }
+
+int		is_symlink(t_list* node)
+{
+	t_entry 		*entry;
+	struct 	stat	buf_stat;
+
+	entry = ((t_entry*)node->content);
+	lstat(entry->name, &buf_stat);
+	return(S_ISLNK(buf_stat.st_mode));
+}
