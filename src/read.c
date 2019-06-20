@@ -66,7 +66,7 @@ t_entry	*get_t_entry(char *entry_name, char *path)
 			show_error(entry_name, 1);
 		if((entry->stat = (struct stat*)malloc(sizeof(struct stat))) == NULL)
 			show_error(entry_name, 1);
-		stat(full_path_str, entry->stat);
+		lstat(full_path_str, entry->stat);
 		free(full_path_str);
 	}
 	return entry;

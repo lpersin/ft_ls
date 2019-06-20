@@ -91,6 +91,7 @@ int					ft_isupper(int c);
 char				*ft_strnjoin(const char *s1, const char *s2, size_t n);
 int					ft_abs(int x);
 unsigned int		ft_countwords(char const *s, char const c);
+int					ft_count_digits(size_t nb);
 void				mem_error();
 void				io_error();
 void				ft_node_to_str(t_list *node);
@@ -103,4 +104,6 @@ t_list				*ft_nodedel(t_list *curr_node, int (*target)(t_list*),
 						void (*del)(void*, size_t));
 t_list				*ft_lst_del_occurences(t_list *head, int (*target)(t_list*),
 						void (*del)(void*, size_t));
+void				ft_write_nbr_r2l(int n, char *buf);
+size_t				get_total_blks_allocated(t_list *node);
 #	endif

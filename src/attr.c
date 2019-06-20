@@ -15,9 +15,10 @@
 void	format_time(char *str_date, char *buf) //buf size should be 12 + 1
 {
 	int i;
+	int j;
 
 	i = 0;
-	if (str_date)
+	if (str_date[23] == '9')
 	{
 		str_date += 4;
 		while (i < 12)
@@ -27,9 +28,29 @@ void	format_time(char *str_date, char *buf) //buf size should be 12 + 1
 			str_date++;
 		}
 	}
+	else
+	{
+		str_date += 4;
+		while (i < 7)
+		{
+			buf[i] = *str_date;
+			i++;
+			str_date++;
+		}
+		j = 0;
+		str_date += 9;
+		buf[++i] = ' ';
+		while(j < 4)
+		{
+			buf[i] = *str_date;
+			i++;
+			str_date++;
+			j++;
+		}
+	}
 }
 
-void	get_mode(mode_t m, char *buf)
+void	get_mode(mode_t m, char **buf)
 {
 	char*	chars;
 	size_t 	i;
@@ -38,35 +59,37 @@ void	get_mode(mode_t m, char *buf)
 	chars = "rwxrwxrwx";
 	while (i < 9)
 	{
-		buf[i] = (m & (1 << (8 - i))) ? chars[i] : '-';
+		*(*(buf) + i)  = (m & (1 << (8 - i))) ? chars[i] : '-';
 		i++;
 	}
 	if (m & S_ISVTX)
-		buf[8] = (m & S_IXOTH) ? 't' : 'T';
+		*(*(buf) + 8) = (m & S_IXOTH) ? 't' : 'T';
 	if (m & S_ISGID)
-		buf[5] = (m & S_IXGRP) ? 's' : 'S';
+		*(*(buf) + 5) = (m & S_IXGRP) ? 's' : 'S';
 	if (m & S_ISUID)
-		buf[2] = (m & S_IXUSR) ? 's' : 'S';
+		*(*(buf) + 2) = (m & S_IXUSR) ? 's' : 'S';
+	*buf += 9;
 }
 
-void	get_type(mode_t m, char *buf)
+void	get_type(mode_t m, char **buf)
 {
 	if (S_ISREG(m))
-		buf[0] = '-';
+		**buf = '-';
 	else if (S_ISDIR(m))
-		buf[0] = 'd';
+		**buf = 'd';
 	else if (S_ISCHR(m))
-		buf[0] = 'c';
+		**buf = 'c';
 	else if (S_ISBLK(m))
-		buf[0] = 'b';
+		**buf = 'b';
 	else if (S_ISFIFO(m))
-		buf[0] = 'p';
+		**buf = 'p';
 	else if (S_ISLNK(m))
-		buf[0] = 'l';
+		**buf = 'l';
 	else if (S_ISSOCK(m))
-		buf[0] = 's';
+		**buf = 's';
 	else
-		buf[0] = 'X';
+		**buf = 'X';
+	*buf += 1;
 }
 
 int is_dir(t_list *node)

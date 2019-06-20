@@ -76,26 +76,34 @@ t_list *delete_invalid_path(t_list *head)
 	return head;
 }
 
-t_list	*show_user_paths(t_list *head, int *flag)
+t_list	*show_user_paths(t_list *head, int *flag, t_options *options)
 {
 	t_list 	*tmp_node;
 
 	tmp_node = NULL;
 	if (head == NULL)
 		return NULL;
-	stat(((t_entry*)head->content)->name, ((t_entry*)head->content)->stat);
+	if (options->l)
+		lstat(((t_entry*)head->content)->name, ((t_entry*)head->content)->stat);
+	else
+		stat(((t_entry*)head->content)->name, ((t_entry*)head->content)->stat);
 	if (!is_dir(head))
 	{
 		*flag = 1;
-		ft_putstr(((t_entry*)head->content)->name);
-		ft_putstr("\n");
+		if(options->l)
+			l_print(head, 1);
+		else
+		{
+			ft_putstr(((t_entry*)head->content)->name);
+			ft_putstr("\n");
+		}
 		tmp_node = head->next;
 		free_entry(head->content, head->content_size);
 		free(head);
 		head = NULL;
-		return show_user_paths(tmp_node, flag);
+		return show_user_paths(tmp_node, flag, options);
 	}
-	head->next = show_user_paths(head->next, flag);
+	head->next = show_user_paths(head->next, flag, options);
 	return head;
 }
 
@@ -108,7 +116,7 @@ t_list *parse_user_args(t_list** head, t_options *options)
 	ft_fct_sortlst(head, alpha_sort);
 	node = delete_invalid_path(*head);
 	sort_entries(&node, options, 1);
-	node = show_user_paths(node, &flag);
+	node = show_user_paths(node, &flag, options);
 	if(node != NULL && flag)
 	 	ft_putstr("\n");
 	return(node);

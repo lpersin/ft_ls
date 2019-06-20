@@ -44,8 +44,8 @@ void	load_options(char *str, t_options * const options);
 void	load_entry(char *path, t_list** paths_lst, char *full_path);
 void	usage_error(char option);
 void	format_time(char *str_date, char *buf);
-void	get_mode(mode_t m, char *buf);
-void	get_type(mode_t m ,char *buf);
+void	get_mode(mode_t m, char **buf);
+void	get_type(mode_t m ,char **buf);
 void	read_dir(char *path, t_list **paths_lst, char *error);
 void	print_paths_lst(t_list *paths_lst);
 int		alpha_sort(t_list* a, t_list* b);
@@ -64,5 +64,5 @@ char	*full_path(char *path, char* suffix);
 void	recursive_ls(char *path, t_list* current_entries, t_options* const options);
 t_list	*parse_user_args(t_list** head, t_options *options);
 int		is_symlink(t_list* node);
-
+void	l_print(t_list *node, int single);
 #endif
