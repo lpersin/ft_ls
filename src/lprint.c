@@ -1,113 +1,49 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lprint.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lpersin <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/06/21 16:37:26 by lpersin           #+#    #+#             */
+/*   Updated: 2019/06/21 17:09:32 by lpersin          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 
-size_t get_max_links_count(t_list *node)
+int		get_longest_groupname(t_list *node)
 {
-	int res;
-	int candidate;
+	int		res;
+	int		candidate;
+	t_entry	*entry;
 
 	res = 0;
-	while(node != NULL)
-	{
-		candidate = (((t_entry*)node->content)->stat->st_nlink);
-		if(candidate > res)
-			res = candidate;
-		node = node->next;
-	}
-	return res;
-}
-
-size_t get_max_bytes_count(t_list *node)
-{
-	int res;
-	int candidate;
-
-	res = 0;
-	while(node != NULL)
-	{
-		candidate = (((t_entry*)node->content)->stat->st_size);
-		if(candidate > res)
-			res = candidate;
-		node = node->next;
-	}
-	return res;
-}
-
-size_t get_total_blks_allocated(t_list *node)
-{
-	int res;
-
-	res = 0;
-	while(node != NULL)
-	{
-		res += ((t_entry*)node->content)->stat->st_blocks;
-		node = node->next;
-	}
-	return res;
-}
-
-int	l_min_str_size(t_list *node)
-{
-	int res;
-	t_entry*	entry;
-
-	entry = (t_entry*)node->content;
-	res = 9 + 2 + ft_count_digits(get_max_links_count(node)) + 1 
-				+ ft_strlen(getpwuid(entry->stat->st_uid)->pw_name) + 2 
-				+ ft_strlen(getgrgid(entry->stat->st_gid)->gr_name) + 2
-				+ ft_count_digits(get_max_bytes_count(node)) + 1 + 12 + 1;
-	return res;
-}
-
-int get_longest_username(t_list *node)
-{
-	int			res;
-	int			candidate;
-	t_entry*	entry;
-
-	res = 0;
-	while(node != NULL)
-	{
-		entry = (t_entry*)node->content;
-		candidate = ft_strlen(getpwuid(entry->stat->st_uid)->pw_name);
-		if(candidate > res)
-			res = candidate;
-		node = node->next;
-	}
-	return res;
-}
-
-int	get_longest_groupname(t_list *node)
-{
-	int			res;
-	int			candidate;
-	t_entry*	entry;
-
-	res = 0;
-	while(node != NULL)
+	while (node != NULL)
 	{
 		entry = (t_entry*)node->content;
 		candidate = ft_strlen(getgrgid(entry->stat->st_gid)->gr_name);
-		if(candidate > res)
+		if (candidate > res)
 			res = candidate;
 		node = node->next;
 	}
-	return res;
+	return (res);
 }
 
-void write_to_buf(char **buf, char* str, int pre_offset, int post_offset)
+void	write_to_buf(char **buf, char *str, int pre_offset, int post_offset)
 {
 	int i;
 
 	i = 0;
 	*buf += pre_offset;
-	while(*str)
+	while (str && *str)
 	{
 		**buf = *str;
 		*buf += 1;
 		str++;
 		i++;
 	}
-	while(post_offset > i)
+	while (post_offset > i)
 	{
 		**buf = ' ';
 		*buf += 1;
@@ -115,19 +51,19 @@ void write_to_buf(char **buf, char* str, int pre_offset, int post_offset)
 	}
 }
 
-void lprint_symlimk_handler(t_list* node, char *s)
+void	lprint_symlimk_handler(t_list *node, char *s)
 {
-	char 	*str;
+	char	*str;
 	ssize_t	offset;
 	t_entry	*entry;
 
 	str = NULL;
-	if(s)
+	if (s)
 	{
 		str = (char*)malloc(sizeof(char) * PATH_MAX);
 		entry = (t_entry*)node->content;
-		if((offset = readlink(entry->full_path, str, PATH_MAX)) == -1)
-			return;
+		if ((offset = readlink(entry->full_path, str, PATH_MAX)) == -1)
+			return ;
 		str[offset] = '\0';
 		ft_putstr(" -> ");
 		ft_putstr(str);
@@ -135,46 +71,54 @@ void lprint_symlimk_handler(t_list* node, char *s)
 	}
 }
 
-void l_print(t_list *node, int single)
+void	l_print(t_list *node, int single)
 {
 	t_entry *entry;
-	char*	str;
+	char	*str;
 	int		str_len;
-	int		min_len;
 	t_list	*head;
-	char*	orig_str;
+	char	*orig_str;
 
 	head = node;
-	if(node != NULL)
-		min_len = l_min_str_size(node);
-	while(node != NULL)
+	if (node != NULL)
+		str_len = l_min_str_size(node) + 2;
+	while (node != NULL)
 	{
 		entry = ((t_entry*)node->content);
-		str_len = min_len + 2;
 		str = ft_strnew(str_len);
 		orig_str = str;
-		ft_strfill(str, ' ', str_len);
-		get_type(entry->stat->st_mode, &str);
-		get_mode(entry->stat->st_mode, &str);
-		str += ft_count_digits(get_max_links_count(head)) + 1;
-		ft_write_nbr_r2l(entry->stat->st_nlink, str);
-		write_to_buf(&str, getpwuid(entry->stat->st_uid)->pw_name, 2, get_longest_username(head));
-		write_to_buf(&str, getgrgid(entry->stat->st_gid)->gr_name, 2, get_longest_groupname(head));
-		str += ft_count_digits(get_max_bytes_count(head)) + 1;
-		ft_write_nbr_r2l(entry->stat->st_size, str);
-		str += 2;
-		format_time(ctime(&(entry->stat->st_mtime)), str);
-		str += 13;
-		*str = '\0';
-		ft_putstr(orig_str);
-		ft_putstr(entry->name);
-		if(S_ISLNK(entry->stat->st_mode))
+		l_print_helper(entry, head, &str, str_len);
+		if (S_ISLNK(entry->stat->st_mode))
 			lprint_symlimk_handler(node, str);
-		if(node->next != NULL || single)
-		 	ft_putstr("\n");
+		if (node->next != NULL || single)
+			ft_putstr("\n");
 		free(orig_str);
-		if(single)
-			break;
+		if (single)
+			break ;
 		node = node->next;
 	}
+}
+
+void	l_print_helper(t_entry *entry, t_list *head, char **str, int str_len)
+{
+	char	*orig_str;
+
+	ft_strfill(*str, ' ', str_len);
+	orig_str = *str;
+	get_type(entry->stat->st_mode, str);
+	get_mode(entry->stat->st_mode, str);
+	*str += ft_count_digits(get_max_links_count(head)) + 1;
+	ft_write_nbr_r2l(entry->stat->st_nlink, *str);
+	write_to_buf(str, getpwuid(entry->stat->st_uid)->pw_name, 2,
+					get_longest_username(head));
+	write_to_buf(str, getgrgid(entry->stat->st_gid)->gr_name, 2,
+					get_longest_groupname(head));
+	*str += ft_count_digits(get_max_bytes_count(head)) + 1;
+	ft_write_nbr_r2l(entry->stat->st_size, *str);
+	*str += 2;
+	format_time(ctime(&(entry->stat->st_mtime)), *str);
+	*str += 13;
+	**str = '\0';
+	ft_putstr(orig_str);
+	ft_putstr(entry->name);
 }

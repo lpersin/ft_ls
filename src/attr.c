@@ -6,7 +6,7 @@
 /*   By: lpersin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 13:41:23 by lpersin           #+#    #+#             */
-/*   Updated: 2019/04/29 13:41:25 by lpersin          ###   ########.fr       */
+/*   Updated: 2019/06/21 16:17:39 by lpersin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 void	format_time(char *str_date, char *buf)
 {
-	if(str_date)
+	if (str_date)
 	{
-		buf[0] = str_date[8];
-		buf[1] = str_date[9];
-		buf[3] = str_date[4];
-		buf[4] = str_date[5];
-		buf[5] = str_date[6];
-		if(str_date[23] == '9')
+		buf[0] = str_date[4];
+		buf[1] = str_date[5];
+		buf[2] = str_date[6];
+		buf[4] = str_date[8];
+		buf[5] = str_date[9];
+		if (str_date[23] == '9')
 		{
 			buf[7] = str_date[11];
 			buf[8] = str_date[12];
@@ -41,14 +41,14 @@ void	format_time(char *str_date, char *buf)
 
 void	get_mode(mode_t m, char **buf)
 {
-	char*	chars;
-	size_t 	i;
+	char	*chars;
+	size_t	i;
 
 	i = 0;
 	chars = "rwxrwxrwx";
 	while (i < 9)
 	{
-		*(*(buf) + i)  = (m & (1 << (8 - i))) ? chars[i] : '-';
+		*(*(buf) + i) = (m & (1 << (8 - i))) ? chars[i] : '-';
 		i++;
 	}
 	if (m & S_ISVTX)
@@ -81,13 +81,13 @@ void	get_type(mode_t m, char **buf)
 	*buf += 1;
 }
 
-int is_dir(t_list *node)
+int		is_dir(t_list *node)
 {
 	return (S_ISDIR(((t_entry*)node->content)->stat->st_mode));
 }
 
-int is_dot_dir(t_list *node)
+int		is_dot_dir(t_list *node)
 {
-	return (!ft_strcmp(((t_entry*)node->content)->name, "..") ||  !ft_strcmp(((t_entry*)node->content)->name, "."));
+	return (!ft_strcmp(((t_entry*)node->content)->name, "..")
+			|| !ft_strcmp(((t_entry*)node->content)->name, "."));
 }
-

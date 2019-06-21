@@ -6,7 +6,7 @@
 /*   By: lpersin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/20 15:31:06 by lpersin           #+#    #+#             */
-/*   Updated: 2019/06/11 15:35:55 by lpersin          ###   ########.fr       */
+/*   Updated: 2019/06/21 16:06:57 by lpersin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void				ft_node_to_str(t_list *node);
 int					get_next_line(const int fd, char **line);
 char				*ft_strfill(char *str, char c, size_t nb);
 void				ft_alpha_sortlst(t_list **head_ref);
-void				ft_fct_sortlst(t_list **head_ref, 
+void				ft_fct_sortlst(t_list **head_ref,
 						int (*f)(t_list*, t_list*));
 t_list				*ft_nodedel(t_list *curr_node, int (*target)(t_list*),
 						void (*del)(void*, size_t));

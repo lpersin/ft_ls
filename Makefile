@@ -1,21 +1,33 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: lpersin <marvin@42.fr>                     +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2019/06/21 18:33:14 by lpersin           #+#    #+#              #
+#    Updated: 2019/06/21 18:33:21 by lpersin          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -I./includes -I./libft -g
+CFLAGS = -Wall -Wextra -Werror -I./includes -I./libft
 LDFLAGS = -L./libft -lft
 
 SRCDIR = src
 OBJDIR = obj
-BINDIR = bin
+#BINDIR = bin
 LIBDIR = libft
 
 SOURCES := $(wildcard $(SRCDIR)/*.c)
 OBJECTS := $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
-EXEC = ft_ls
+NAME = ft_ls
 
 LIB = libft.a
 
-all: $(LIBDIR)/$(LIB) $(BINDIR)/$(EXEC) 
+all: $(NAME) 
 
-$(BINDIR)/$(EXEC): $(OBJECTS)
+$(NAME): $(OBJECTS) $(LIBDIR)/$(LIB)
 	$(CC) $(CFLAGS) $(OBJECTS) -o $@ $(LDFLAGS)
 
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
@@ -32,6 +44,6 @@ clean:
 
 fclean: clean
 	$(MAKE) fclean -C  $(LIBDIR)
-	/bin/rm -rf $(BINDIR)/$(EXEC)
+	/bin/rm -rf $(NAME)
 
 re: fclean all

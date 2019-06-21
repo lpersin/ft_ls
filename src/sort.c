@@ -6,41 +6,43 @@
 /*   By: lpersin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 17:03:29 by lpersin           #+#    #+#             */
-/*   Updated: 2019/06/13 17:03:31 by lpersin          ###   ########.fr       */
+/*   Updated: 2019/06/21 16:25:31 by lpersin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-int	alpha_sort(t_list* a, t_list* b)
+int		alpha_sort(t_list *a, t_list *b)
 {
-	return (ft_strcmp(((t_entry*)a->content)->name, 
+	return (ft_strcmp(((t_entry*)a->content)->name,
 				((t_entry*)b->content)->name));
 }
 
-int last_modif_time_sort(t_list* a, t_list*b)
+int		last_modif_time_sort(t_list *a, t_list *b)
 {
 	long res;
 
-	res = (long) ((t_entry*)a->content)->stat->st_mtimespec.tv_sec - 
+	res = (long)((t_entry*)a->content)->stat->st_mtimespec.tv_sec -
 			((t_entry*)b->content)->stat->st_mtimespec.tv_sec;
-	 if (res == 0)
-	 {
-	 	res = ft_strcmp(((t_entry*)b->content)->name, 
-	 			((t_entry*)a->content)->name);
+	if (res == 0)
+	{
+		res = ft_strcmp(((t_entry*)b->content)->name,
+				((t_entry*)a->content)->name);
 	}
 	return (res);
 }
 
-int is_dot_entry(t_list *node)
+int		is_dot_entry(t_list *node)
 {
 	return (((t_entry*)node->content)->name[0] == '.');
 }
 
-void sort_entries(t_list **entries_lst, t_options* const options, char user_path)
+void	sort_entries(t_list **entries_lst, t_options *const options,
+			char user_path)
 {
 	if (options->a == 0 && !user_path)
-		*entries_lst = ft_lst_del_occurences(*entries_lst, is_dot_entry, free_entry);
+		*entries_lst = ft_lst_del_occurences(*entries_lst, is_dot_entry,
+							free_entry);
 	if (options->t == 1)
 	{
 		ft_fct_sortlst(entries_lst, last_modif_time_sort);
@@ -52,12 +54,12 @@ void sort_entries(t_list **entries_lst, t_options* const options, char user_path
 		ft_lstrev(entries_lst);
 }
 
-int		is_symlink(t_list* node)
+int		is_symlink(t_list *node)
 {
-	t_entry 		*entry;
-	struct 	stat	buf_stat;
+	t_entry		*entry;
+	struct stat	buf_stat;
 
 	entry = ((t_entry*)node->content);
 	lstat(entry->name, &buf_stat);
-	return(S_ISLNK(buf_stat.st_mode));
+	return (S_ISLNK(buf_stat.st_mode));
 }

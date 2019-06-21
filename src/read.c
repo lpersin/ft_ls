@@ -6,7 +6,7 @@
 /*   By: lpersin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 17:03:23 by lpersin           #+#    #+#             */
-/*   Updated: 2019/06/13 17:03:26 by lpersin          ###   ########.fr       */
+/*   Updated: 2019/06/21 16:29:01 by lpersin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 void	read_dir(char *path, t_list **paths_lst, char *error)
 {
-	DIR *dir_p;
-	struct dirent* dp;
+	DIR				*dir_p;
+	struct dirent	*dp;
 
-	if((dir_p = opendir(path)) != NULL)
+	if ((dir_p = opendir(path)) != NULL)
 	{
 		while ((dp = readdir(dir_p)) != NULL)
 		{
@@ -32,23 +32,22 @@ void	read_dir(char *path, t_list **paths_lst, char *error)
 	}
 }
 
-char *full_path(char *path, char* suffix)
+char	*full_path(char *path, char *suffix)
 {
-	char *str;
-	char *tmp;
+	char	*str;
+	char	*tmp;
 
 	str = NULL;
 	tmp = NULL;
-	if(suffix == NULL)
-		return ft_strdup(path);
-	if((str = ft_strjoin(suffix, "/")) != NULL)
+	if (suffix == NULL)
+		return (ft_strdup(path));
+	if ((str = ft_strjoin(suffix, "/")) != NULL)
 	{
 		tmp = str;
 		str = ft_strjoin(str, path);
 	}
 	free(tmp);
-
-	return str;
+	return (str);
 }
 
 t_entry	*get_t_entry(char *entry_name, char *path)
@@ -62,20 +61,19 @@ t_entry	*get_t_entry(char *entry_name, char *path)
 			show_error(entry_name, 1);
 		if ((entry->name = ft_strdup(entry_name)) == NULL)
 			show_error(entry_name, 1);
-		if((entry->stat = (struct stat*)malloc(sizeof(struct stat))) == NULL)
+		if ((entry->stat = (struct stat*)malloc(sizeof(struct stat))) == NULL)
 			show_error(entry_name, 1);
-		if((entry->full_path = full_path(entry_name, path)) == NULL)
-		 	show_error(entry_name, 1); 
+		if ((entry->full_path = full_path(entry_name, path)) == NULL)
+			show_error(entry_name, 1);
 		lstat(entry->full_path, entry->stat);
-
 	}
-	return entry;
+	return (entry);
 }
 
-void load_entry(char *entry_name, t_list** paths_lst, char *path)
+void	load_entry(char *entry_name, t_list **paths_lst, char *path)
 {
-	t_list*		node;
-	t_entry*	entry;
+	t_list	*node;
+	t_entry	*entry;
 
 	entry = get_t_entry(entry_name, path);
 	if ((node = ft_lstnew(entry, sizeof(t_entry))) == NULL)

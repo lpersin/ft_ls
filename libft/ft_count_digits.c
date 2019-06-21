@@ -1,15 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_count_digits.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lpersin <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/06/21 15:54:37 by lpersin           #+#    #+#             */
+/*   Updated: 2019/06/21 15:58:38 by lpersin          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
-int ft_count_digits(size_t nb)
+int	ft_count_digits(size_t nb)
 {
-    int res;
-    
-    res = 1;
+	int res;
 
-    while(nb / 10 > 0)
-    {
-        nb = nb / 10;
-        res++;
-    }
-    return res;
+	res = 1;
+	while (nb / 10 > 0)
+	{
+		nb = nb / 10;
+		res++;
+	}
+	return (res);
 }

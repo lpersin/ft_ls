@@ -6,7 +6,7 @@
 /*   By: lpersin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 17:03:15 by lpersin           #+#    #+#             */
-/*   Updated: 2019/06/13 17:03:20 by lpersin          ###   ########.fr       */
+/*   Updated: 2019/06/21 16:21:03 by lpersin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 void	print_paths_lst(t_list *paths_lst)
 {
-	//if(paths_lst != NULL)
-	//	ft_putstr("\n");
 	while (paths_lst != NULL)
 	{
 		ft_putstr(((t_entry*)paths_lst->content)->name);
@@ -25,9 +23,9 @@ void	print_paths_lst(t_list *paths_lst)
 	}
 }
 
-void print_dir_path(char *path, int one_entry)
+void	print_dir_path(char *path, int one_entry)
 {
-	if(!one_entry)
+	if (!one_entry)
 	{
 		ft_putstr(path);
 		ft_putstr(":\n");
