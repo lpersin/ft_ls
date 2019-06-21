@@ -102,14 +102,16 @@ void	l_print(t_list *node, int single)
 void	l_print_helper(t_entry *entry, t_list *head, char **str, int str_len)
 {
 	char	*orig_str;
-
+	char	*pw_name;
+	
+	pw_name = ft_strdup(getpwuid(entry->stat->st_uid)->pw_name);
 	ft_strfill(*str, ' ', str_len);
 	orig_str = *str;
 	get_type(entry->stat->st_mode, str);
 	get_mode(entry->stat->st_mode, str);
 	*str += ft_count_digits(get_max_links_count(head)) + 1;
 	ft_write_nbr_r2l(entry->stat->st_nlink, *str);
-	write_to_buf(str, getpwuid(entry->stat->st_uid)->pw_name, 2,
+	write_to_buf(str, pw_name, 2,
 					get_longest_username(head));
 	write_to_buf(str, getgrgid(entry->stat->st_gid)->gr_name, 2,
 					get_longest_groupname(head));
@@ -121,4 +123,5 @@ void	l_print_helper(t_entry *entry, t_list *head, char **str, int str_len)
 	**str = '\0';
 	ft_putstr(orig_str);
 	ft_putstr(entry->name);
+	free(pw_name);
 }
