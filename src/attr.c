@@ -12,40 +12,29 @@
 
 #include "ft_ls.h"
 
-void	format_time(char *str_date, char *buf) //buf size should be 12 + 1
+void	format_time(char *str_date, char *buf)
 {
-	int i;
-	int j;
-
-	i = 0;
-	if (str_date[23] == '9')
+	if(str_date)
 	{
-		str_date += 4;
-		while (i < 12)
+		buf[0] = str_date[8];
+		buf[1] = str_date[9];
+		buf[3] = str_date[4];
+		buf[4] = str_date[5];
+		buf[5] = str_date[6];
+		if(str_date[23] == '9')
 		{
-			buf[i] = *str_date;
-			i++;
-			str_date++;
+			buf[7] = str_date[11];
+			buf[8] = str_date[12];
+			buf[9] = str_date[13];
+			buf[10] = str_date[14];
+			buf[11] = str_date[15];
 		}
-	}
-	else
-	{
-		str_date += 4;
-		while (i < 7)
+		else
 		{
-			buf[i] = *str_date;
-			i++;
-			str_date++;
-		}
-		j = 0;
-		str_date += 9;
-		buf[++i] = ' ';
-		while(j < 4)
-		{
-			buf[i] = *str_date;
-			i++;
-			str_date++;
-			j++;
+			buf[8] = str_date[20];
+			buf[9] = str_date[21];
+			buf[10] = str_date[22];
+			buf[11] = str_date[23];
 		}
 	}
 }

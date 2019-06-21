@@ -28,7 +28,7 @@ void	read_dir(char *path, t_list **paths_lst, char *error)
 	else
 	{
 		*error = 1;
-		show_error(path, 0);
+		show_error(ft_strrchr(path, '/') + 1, 0);
 	}
 }
 
@@ -54,20 +54,20 @@ char *full_path(char *path, char* suffix)
 t_entry	*get_t_entry(char *entry_name, char *path)
 {
 	t_entry	*entry;
-	char	*full_path_str;
 
 	entry = NULL;
 	if (entry_name != NULL)
 	{
-		full_path_str = full_path(entry_name, path);
 		if ((entry = (t_entry*)malloc(sizeof(t_entry))) == NULL)
 			show_error(entry_name, 1);
 		if ((entry->name = ft_strdup(entry_name)) == NULL)
 			show_error(entry_name, 1);
 		if((entry->stat = (struct stat*)malloc(sizeof(struct stat))) == NULL)
 			show_error(entry_name, 1);
-		lstat(full_path_str, entry->stat);
-		free(full_path_str);
+		if((entry->full_path = full_path(entry_name, path)) == NULL)
+		 	show_error(entry_name, 1); 
+		lstat(entry->full_path, entry->stat);
+
 	}
 	return entry;
 }

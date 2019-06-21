@@ -19,6 +19,7 @@ void free_entry(void *v_entry, size_t content_size)
 	{
 		ft_memdel((void**) &(entry->name));
 		ft_memdel((void**) &(entry->stat));
+		ft_memdel((void**) &(entry->full_path));
 		ft_memdel((void**) &(entry));
 	}
 }

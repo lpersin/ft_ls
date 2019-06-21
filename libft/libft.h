@@ -106,4 +106,5 @@ t_list				*ft_lst_del_occurences(t_list *head, int (*target)(t_list*),
 						void (*del)(void*, size_t));
 void				ft_write_nbr_r2l(int n, char *buf);
 size_t				get_total_blks_allocated(t_list *node);
+
 #	endif

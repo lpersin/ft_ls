@@ -37,7 +37,8 @@ typedef struct	s_options
 }				t_options;
 typedef struct s_entry
 {
-	char *name;
+	char 		*name;
+	char		*full_path;
 	struct stat *stat;
 }				t_entry;
 void	get_args(int ac, char **argv, t_options* const options, t_list** paths_lst);

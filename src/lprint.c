@@ -1,4 +1,4 @@
-#include "ft_ls.c"
+#include "ft_ls.h"
 
 size_t get_max_links_count(t_list *node)
 {
@@ -115,7 +115,7 @@ void write_to_buf(char **buf, char* str, int pre_offset, int post_offset)
 	}
 }
 
-char *lprint_symlimk_handler(t_list* node, char *s)
+void lprint_symlimk_handler(t_list* node, char *s)
 {
 	char 	*str;
 	ssize_t	offset;
@@ -126,11 +126,13 @@ char *lprint_symlimk_handler(t_list* node, char *s)
 	{
 		str = (char*)malloc(sizeof(char) * PATH_MAX);
 		entry = (t_entry*)node->content;
-		if((offset = readlink(entry->name, str, PATH_MAX)) == -1)
-			return NULL;
+		if((offset = readlink(entry->full_path, str, PATH_MAX)) == -1)
+			return;
 		str[offset] = '\0';
+		ft_putstr(" -> ");
+		ft_putstr(str);
+		free(str);
 	}
-	return str;
 }
 
 void l_print(t_list *node, int single)
@@ -147,9 +149,8 @@ void l_print(t_list *node, int single)
 		min_len = l_min_str_size(node);
 	while(node != NULL)
 	{
-		
 		entry = ((t_entry*)node->content);
-		str_len = min_len + ft_strlen(entry->name) + 2;
+		str_len = min_len + 2;
 		str = ft_strnew(str_len);
 		orig_str = str;
 		ft_strfill(str, ' ', str_len);
@@ -164,8 +165,11 @@ void l_print(t_list *node, int single)
 		str += 2;
 		format_time(ctime(&(entry->stat->st_mtime)), str);
 		str += 13;
-		write_to_buf(&str, entry->name, 0, 0);
+		*str = '\0';
 		ft_putstr(orig_str);
+		ft_putstr(entry->name);
+		if(S_ISLNK(entry->stat->st_mode))
+			lprint_symlimk_handler(node, str);
 		if(node->next != NULL || single)
 		 	ft_putstr("\n");
 		free(orig_str);
