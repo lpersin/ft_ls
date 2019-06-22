@@ -6,7 +6,7 @@
 /*   By: lpersin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/21 16:37:26 by lpersin           #+#    #+#             */
-/*   Updated: 2019/06/21 17:09:32 by lpersin          ###   ########.fr       */
+/*   Updated: 2019/06/22 12:11:46 by lpersin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void	l_print_helper(t_entry *entry, t_list *head, char **str, int str_len)
 {
 	char	*orig_str;
 	char	*pw_name;
-	
+
 	pw_name = ft_strdup(getpwuid(entry->stat->st_uid)->pw_name);
 	ft_strfill(*str, ' ', str_len);
 	orig_str = *str;
