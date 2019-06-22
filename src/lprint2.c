@@ -18,6 +18,7 @@ size_t	get_max_links_count(t_list *node)
 	int candidate;
 
 	res = 0;
+	candidate = 0;
 	while (node != NULL)
 	{
 		candidate = (((t_entry*)node->content)->stat->st_nlink);
@@ -34,6 +35,7 @@ size_t	get_max_bytes_count(t_list *node)
 	int candidate;
 
 	res = 0;
+	candidate = 0;
 	while (node != NULL)
 	{
 		candidate = (((t_entry*)node->content)->stat->st_size);
@@ -72,18 +74,25 @@ int		l_min_str_size(t_list *node)
 
 int		get_longest_username(t_list *node)
 {
-	int		res;
-	int		candidate;
-	t_entry	*entry;
+	int				res;
+	int				candidate;
+	t_entry			*entry;
+	char			*pw_name;
+	struct passwd	*t_pass;
 
 	res = 0;
+	candidate = 0;
 	while (node != NULL)
 	{
 		entry = (t_entry*)node->content;
-		candidate = ft_strlen(getpwuid(entry->stat->st_uid)->pw_name);
+		t_pass = getpwuid(entry->stat->st_uid);
+		pw_name = ft_strdup(t_pass->pw_name);
+		if (pw_name != NULL)
+			candidate = ft_strlen(pw_name);
 		if (candidate > res)
 			res = candidate;
 		node = node->next;
+		ft_memdel((void**)&pw_name);
 	}
 	return (res);
 }

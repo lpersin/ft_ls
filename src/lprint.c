@@ -14,18 +14,25 @@
 
 int		get_longest_groupname(t_list *node)
 {
-	int		res;
-	int		candidate;
-	t_entry	*entry;
+	int				res;
+	int				candidate;
+	t_entry			*entry;
+	char			*gr_name;
+	struct group	*t_gr;
 
 	res = 0;
+	candidate = 0;
 	while (node != NULL)
 	{
 		entry = (t_entry*)node->content;
-		candidate = ft_strlen(getgrgid(entry->stat->st_gid)->gr_name);
+		t_gr = getgrgid(entry->stat->st_gid);
+		gr_name = ft_strdup(t_gr->gr_name);
+		if (gr_name != NULL)
+			candidate = ft_strlen(gr_name);
 		if (candidate > res)
 			res = candidate;
 		node = node->next;
+		ft_memdel((void**)&gr_name);
 	}
 	return (res);
 }
@@ -81,7 +88,7 @@ void	l_print(t_list *node, int single)
 
 	head = node;
 	if (node != NULL)
-		str_len = l_min_str_size(node) + 2;
+		str_len = l_min_str_size(node) + PATH_MAX;
 	while (node != NULL)
 	{
 		entry = ((t_entry*)node->content);
@@ -103,18 +110,18 @@ void	l_print_helper(t_entry *entry, t_list *head, char **str, int str_len)
 {
 	char	*orig_str;
 	char	*pw_name;
+	char	*pw_guid;
 
 	pw_name = ft_strdup(getpwuid(entry->stat->st_uid)->pw_name);
+	pw_guid = ft_strdup(getgrgid(entry->stat->st_gid)->gr_name);
 	ft_strfill(*str, ' ', str_len);
 	orig_str = *str;
 	get_type(entry->stat->st_mode, str);
 	get_mode(entry->stat->st_mode, str);
 	*str += ft_count_digits(get_max_links_count(head)) + 1;
 	ft_write_nbr_r2l(entry->stat->st_nlink, *str);
-	write_to_buf(str, pw_name, 2,
-					get_longest_username(head));
-	write_to_buf(str, getgrgid(entry->stat->st_gid)->gr_name, 2,
-					get_longest_groupname(head));
+	write_to_buf(str, pw_name, 2, get_longest_username(head));
+	write_to_buf(str, pw_guid, 2, get_longest_groupname(head));
 	*str += ft_count_digits(get_max_bytes_count(head)) + 1;
 	ft_write_nbr_r2l(entry->stat->st_size, *str);
 	*str += 2;
@@ -123,5 +130,6 @@ void	l_print_helper(t_entry *entry, t_list *head, char **str, int str_len)
 	**str = '\0';
 	ft_putstr(orig_str);
 	ft_putstr(entry->name);
-	free(pw_name);
+	ft_memdel((void**)&pw_name);
+	ft_memdel((void**)&pw_guid);
 }
